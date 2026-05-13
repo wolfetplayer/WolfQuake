@@ -1427,7 +1427,7 @@ void Weapon_RocketLauncher_Fire( gentity_t *ent, float aimSpreadScale ) {
 	gentity_t   *m;
 
 	// get a little bit of randomness and apply it back to the direction
-	if ( !ent->aiCharacter ) {
+	/*if ( !ent->aiCharacter ) {
 		r = crandom() * aimSpreadScale;
 		u = crandom() * aimSpreadScale;
 
@@ -1443,9 +1443,9 @@ void Weapon_RocketLauncher_Fire( gentity_t *ent, float aimSpreadScale ) {
 		// add kick-back
 		VectorMA( ent->client->ps.velocity, -80, forward, ent->client->ps.velocity ); // RealRTCW was -64
 
-	} else {
+	} else {*/
 		m = fire_rocket( ent, muzzleEffect, forward );
-	}
+	//}
 
 	m->damage *= s_quadFactor;
 	m->splashDamage *= s_quadFactor;
@@ -1713,6 +1713,7 @@ void CalcMuzzlePoint( gentity_t *ent, int weapon, vec3_t forward, vec3_t right, 
 	switch ( weapon )  // Ridah, changed this so I can predict weapons
 	{
 	case WP_PANZERFAUST:
+	case WP_Q3_ROCKET_LAUNCHER:
 //			VectorMA( muzzlePoint, 14, right, muzzlePoint );	//----(SA)	new first person rl position
 		VectorMA( muzzlePoint, 10, right, muzzlePoint );        //----(SA)	new first person rl position
 		VectorMA( muzzlePoint, -10, up, muzzlePoint );
@@ -1841,6 +1842,7 @@ void FireWeapon( gentity_t *ent ) {
 				break;
 
 			case WP_PANZERFAUST:
+			case WP_Q3_ROCKET_LAUNCHER:
 				aimSpreadScale += 0.3f;     // it's calculated a different way, so this keeps the accuracy never perfect, but never rediculously wild either
 				break;
 
@@ -1982,6 +1984,22 @@ void FireWeapon( gentity_t *ent ) {
 		else
 		{
 			for (int i = 0; i < ammoTable[WP_PANZERFAUST].uses; i++)
+			{
+				Weapon_RocketLauncher_Fire(ent, aimSpreadScale);
+			}
+		}
+		break;
+	case WP_Q3_ROCKET_LAUNCHER:
+		if (ent->client->ps.weaponUpgraded[WP_Q3_ROCKET_LAUNCHER])
+		{
+			for (int i = 0; i < ammoTable[WP_Q3_ROCKET_LAUNCHER].usesUpgraded; i++)
+			{
+				Weapon_RocketLauncher_Fire(ent, aimSpreadScale);
+			}
+		}
+		else
+		{
+			for (int i = 0; i < ammoTable[WP_Q3_ROCKET_LAUNCHER].uses; i++)
 			{
 				Weapon_RocketLauncher_Fire(ent, aimSpreadScale);
 			}

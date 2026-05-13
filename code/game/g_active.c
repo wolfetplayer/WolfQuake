@@ -1803,6 +1803,7 @@ void ClientEndFrame( gentity_t *ent ) {
 			AICast_CheckDangerousEntity( ent, DANGER_CLIENTAIM, 4000, 0.5, 0.8, ( ent->client->buttons & BUTTON_ATTACK ? qtrue : qfalse ) );
 			break;
 		case WP_PANZERFAUST:    // just predict a rocket attack, rather than waiting for them to fire, then avoiding
+		case WP_Q3_ROCKET_LAUNCHER:
 			AICast_CheckDangerousEntity( ent, DANGER_CLIENTAIM, 1000, 0.5, 0.8, ( ent->client->buttons & BUTTON_ATTACK ? qtrue : qfalse ) );
 			break;
 		case WP_GRENADE_PINEAPPLE:

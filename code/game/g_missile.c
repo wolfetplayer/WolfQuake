@@ -626,7 +626,7 @@ void G_RunMissile( gentity_t *ent ) {
 			return;
 		}
 
-		if ( ent->s.weapon == WP_PANZERFAUST ) {
+		if ( ent->s.weapon == WP_PANZERFAUST || ent->s.weapon == WP_Q3_ROCKET_LAUNCHER ) {
 			impactDamage = 999; // goes through pretty much any func_explosives
 		} else {
 			impactDamage = 6;   // "grenade"/"dynamite"		// probably adjust this based on velocity //----(SA)	adjusted to not break through so much stuff.  try it to see if this is good enough
@@ -1036,51 +1036,78 @@ gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t dir, int grenadeW
 fire_rocket
 =================
 */
+/*
+=================
+fire_rocket
+=================
+*/
 gentity_t *fire_rocket( gentity_t *self, vec3_t start, vec3_t dir ) {
-	gentity_t   *bolt;
+	gentity_t *bolt;
+	qboolean isQ3Rocket = qfalse;
+	int rocketWeapon = WP_PANZERFAUST;
 
 	VectorNormalize( dir );
 
+	/*
+	 * fire_rocket() has no weapon argument, so detect the launcher from
+	 * the firing entity. For players, ps.weapon is the safest source.
+	 */
+	if ( self->client && self->client->ps.weapon == WP_Q3_ROCKET_LAUNCHER ) {
+		isQ3Rocket = qtrue;
+		rocketWeapon = WP_Q3_ROCKET_LAUNCHER;
+	} else if ( self->s.weapon == WP_Q3_ROCKET_LAUNCHER ) {
+		isQ3Rocket = qtrue;
+		rocketWeapon = WP_Q3_ROCKET_LAUNCHER;
+	}
+
 	bolt = G_Spawn();
 	bolt->classname = "rocket";
-	bolt->nextthink = level.time + 20000;   // push it out a little
+
+	if ( isQ3Rocket ) {
+		bolt->nextthink = level.time + 15000;
+	} else {
+		bolt->nextthink = level.time + 20000;   // push it out a little
+	}
+
 	bolt->think = G_ExplodeMissile;
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN | SVF_BROADCAST;
 
-	bolt->s.weapon = WP_PANZERFAUST;
+	bolt->s.weapon = rocketWeapon;
 
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
+	bolt->target_ent = NULL;
 
-	if (self->aiCharacter)
-	{
-		// AI keeps using fixed values
+	if ( isQ3Rocket ) {
+		/*
+		 * Quake 3 rocket launcher behavior.
+		 * Fixed damage, fixed splash, no upgrades, no class bonuses.
+		 */
+		bolt->damage = 100;
+		bolt->splashDamage = 100;
+		bolt->splashRadius = 120;
+	} else if ( self->aiCharacter ) {
+		// AI keeps using fixed Panzerfaust values
 		bolt->damage = ammoTable[WP_PANZERFAUST].aiDamage;
 		bolt->splashDamage = ammoTable[WP_PANZERFAUST].aiDamage;
 		bolt->splashRadius = ammoTable[WP_PANZERFAUST].aiSplashRadius;
-	}
-	else
-	{
+	} else {
 		int upgradeLevel = self->client ? self->client->ps.weaponUpgraded[WP_PANZERFAUST] : 0;
 
-		if (upgradeLevel >= 1)
-		{
+		if ( upgradeLevel >= 1 ) {
 			bolt->damage = ammoTable[WP_PANZERFAUST].playerDamageUpgraded * upgradeLevel;
-		}
-		else
-		{
+		} else {
 			bolt->damage = ammoTable[WP_PANZERFAUST].playerDamage;
 		}
 
-		bolt->splashDamage = bolt->damage; // Same value
+		bolt->splashDamage = bolt->damage;
 		bolt->splashRadius = ammoTable[WP_PANZERFAUST].playerSplashRadius;
 
-		// Soldier bonus (applied after base/upgraded damage is picked)
-		if (g_gametype.integer == GT_SURVIVAL &&
-			self->client &&
-			self->client->ps.stats[STAT_PLAYER_CLASS] == PC_SOLDIER)
-		{
+		// Soldier bonus applies only to Panzerfaust, not Q3 rocket launcher
+		if ( g_gametype.integer == GT_SURVIVAL &&
+			 self->client &&
+			 self->client->ps.stats[STAT_PLAYER_CLASS] == PC_SOLDIER ) {
 			bolt->damage *= 1.50f;
 			bolt->splashDamage *= 1.50f;
 			bolt->splashRadius *= 1.50f;
@@ -1089,31 +1116,41 @@ gentity_t *fire_rocket( gentity_t *self, vec3_t start, vec3_t dir ) {
 
 	bolt->methodOfDeath = MOD_ROCKET;
 	bolt->splashMethodOfDeath = MOD_ROCKET_SPLASH;
-//	bolt->clipmask = MASK_SHOT;
-	bolt->clipmask = MASK_MISSILESHOT;
 
-    if ( g_gametype.integer == GT_GOTHIC ) 
-	        {
-	           if ( self->aiCharacter == AICHAR_SUPERSOLDIER || self->aiCharacter == AICHAR_PROTOSOLDIER || self->aiCharacter == AICHAR_SUPERSOLDIER_LAB ) { 
-		       bolt->s.pos.trType = TR_LINEAR; // no special behaviour for robots - it looks cringe
-		       } else {
-		       bolt->s.pos.trType = TR_GRAVITY_LOW; //special rocket behaviour for gothicstein
-		       } 
-            } else {
-	           bolt->s.pos.trType = TR_LINEAR; // Default rocket behaviour
+	if ( isQ3Rocket ) {
+		bolt->clipmask = MASK_SHOT;
+	} else {
+		bolt->clipmask = MASK_MISSILESHOT;
+	}
+
+	if ( isQ3Rocket ) {
+		// Quake 3 rocket launcher always uses simple linear movement
+		bolt->s.pos.trType = TR_LINEAR;
+	} else if ( g_gametype.integer == GT_GOTHIC ) {
+		if ( self->aiCharacter == AICHAR_SUPERSOLDIER ||
+			 self->aiCharacter == AICHAR_PROTOSOLDIER ||
+			 self->aiCharacter == AICHAR_SUPERSOLDIER_LAB ) {
+			bolt->s.pos.trType = TR_LINEAR; // no special behaviour for robots - it looks cringe
+		} else {
+			bolt->s.pos.trType = TR_GRAVITY_LOW; // special rocket behaviour for gothicstein
+		}
+	} else {
+		bolt->s.pos.trType = TR_LINEAR; // Default rocket behaviour
 	}
 
 	bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;     // move a bit on the very first frame
 	VectorCopy( start, bolt->s.pos.trBase );
-//	VectorScale( dir, 900, bolt->s.pos.trDelta );	// old speed was 900
 
-		// ai gets dynamics they're used to
-		if ( self->aiCharacter ) {
-			VectorScale( dir, 1000, bolt->s.pos.trDelta );
-		} else {
-			// (SA) trying a bit more speed in SP for player rockets
-			VectorScale( dir, 1300, bolt->s.pos.trDelta );
-		}
+	if ( isQ3Rocket ) {
+		// Original Quake 3 rocket speed
+		VectorScale( dir, 900, bolt->s.pos.trDelta );
+	} else if ( self->aiCharacter ) {
+		// AI gets dynamics they're used to
+		VectorScale( dir, 1000, bolt->s.pos.trDelta );
+	} else {
+		// (SA) trying a bit more speed in SP for player rockets
+		VectorScale( dir, 1300, bolt->s.pos.trDelta );
+	}
 
 	SnapVector( bolt->s.pos.trDelta );          // save net bandwidth
 	VectorCopy( start, bolt->r.currentOrigin );

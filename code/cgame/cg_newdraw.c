@@ -157,6 +157,7 @@ static int weapIconDrawSize( int weap ) {
 	case WP_VENOM:
 	case WP_TESLA:
 	case WP_PANZERFAUST:
+	case WP_Q3_ROCKET_LAUNCHER:
 	case WP_FLAMETHROWER:
 	case WP_FG42:
 	case WP_FG42SCOPE:
@@ -520,6 +521,7 @@ static void CG_DrawPlayerAmmoValue( rectDef_t *rect, int font, float scale, vec4
 	case WP_GRENADE_PINEAPPLE:
 	case WP_DYNAMITE:
 	case WP_TESLA:
+	case WP_Q3_ROCKET_LAUNCHER:
 	case WP_FLAMETHROWER:
 	case WP_HOLYCROSS:
 		if ( type == 0 ) {  // don't draw reserve value, just clip (since these weapons have all their ammo in the clip)

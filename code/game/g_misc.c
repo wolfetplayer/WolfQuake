@@ -810,6 +810,7 @@ void Use_Shooter( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 		fire_grenade( ent, ent->s.origin, dir, WP_GRENADE_LAUNCHER );
 		break;
 	case WP_PANZERFAUST:
+	case WP_Q3_ROCKET_LAUNCHER:
 		fire_rocket( ent, ent->s.origin, dir );
 		break;
 

@@ -882,6 +882,53 @@ ammoTable_t ammoTable[WP_NUM_WEAPONS] = {
 		0,
 		0,                                   
 	}, 
+	{   
+		WP_Q3_ROCKET_LAUNCHER,
+		WEAPON_CLASS_LAUNCHER,
+		WP_NONE,
+		WEAPON_TEAM_COMMON,      
+		0,                   
+		0,       
+		0,        
+		0,        
+		0,        
+		0,
+		0, 
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,     
+		0,
+		0,      
+		0,      
+		0,      
+		0,      
+		0,        
+		0,        
+		0,        
+		0,          
+		0,                 
+		0.0f,            
+		0,               
+		{.0, 0},         
+		{0,0},              
+		0,               
+		0.0,               
+		0,               
+		0,
+		{0.0, 0.0},               
+		MOD_Q3_ROCKET_LAUNCHER, 
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,                               
+	},
    // Explosives
 	{  
 		WP_GRENADE_LAUNCHER,
@@ -2880,6 +2927,61 @@ model="models/weapons2/tesla/pu_tesla.md3"
 		WP_TESLA,
 		"",                          
 		"",                          
+		{0,0,0,0,0,0}
+	},
+
+
+	/*QUAKED weapon_panzerfaust (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons2/panzerfaust/pf.md3"
+*/
+	{
+		"weapon_q3_rocket_launcher",
+		"sound/misc/w_pkup.wav",
+		{   
+		"",
+		"",
+		""
+		},
+
+		"icons/icon_q3_rocket_launcher", 
+		"Rocket Launcher",               
+		10,
+		IT_WEAPON,
+		WP_Q3_ROCKET_LAUNCHER,
+		WP_Q3_ROCKET_LAUNCHER,
+		WP_Q3_ROCKET_LAUNCHER,
+		WP_Q3_ROCKET_LAUNCHER,
+		WP_Q3_ROCKET_LAUNCHER,
+		"",                      
+		"",                      
+		{0,0,0,0,0,0}
+	},
+
+	/*QUAKED weapon_panzerfaust (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
+-------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
+model="models/weapons2/panzerfaust/pf.md3"
+*/
+	{
+		"ammo_q3_rockets",
+		"sound/misc/w_pkup.wav",
+		{   
+		"",
+		"",
+		""
+		},
+
+		"icons/iconw_panzerfaust_1", 
+		"Rockets",               
+		5,
+		IT_AMMO,
+		WP_NONE,
+		WP_Q3_ROCKET_LAUNCHER,
+		WP_Q3_ROCKET_LAUNCHER,
+		WP_Q3_ROCKET_LAUNCHER,
+		WP_Q3_ROCKET_LAUNCHER,
+		"",                      
+		"",                      
 		{0,0,0,0,0,0}
 	},
 
@@ -7273,6 +7375,7 @@ char *BG_GetWeaponFilename( weapon_t weaponNum )
 		case WP_POISONGAS:         return "poisongas.weap";
 		case WP_HOLYCROSS:         return "cross.weap";
 		case WP_DUMMY_MG42:        return "dummy_mg42.weap";
+		case WP_Q3_ROCKET_LAUNCHER: return "q3_rocket_launcher.weap";
 		case WP_NONE:
 		case WP_MONSTER_ATTACK1:
 		case WP_MONSTER_ATTACK2:

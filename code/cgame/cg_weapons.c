@@ -654,6 +654,9 @@ static void CG_PanzerFaustEjectBrass( centity_t *cent ) {
 	float waterScale = 1.0f;
 	vec3_t v[3];
 
+	if ( cent->currentState.weapon == WP_Q3_ROCKET_LAUNCHER)
+		return;
+
 	le = CG_AllocLocalEntity();
 	re = &le->refEntity;
 
@@ -3867,6 +3870,7 @@ void CG_DrawWeaponSelect( void ) {
 		case WP_VENOM:
 		case WP_TESLA:
 		case WP_PANZERFAUST:
+		case WP_Q3_ROCKET_LAUNCHER:
 		case WP_FLAMETHROWER:
 		case WP_FG42:
 		case WP_FG42SCOPE:
@@ -5433,6 +5437,7 @@ void CG_WeaponFireRecoil( int weapon ) {
 		yawRandom *= 0.5;
 	break;
 	case WP_PANZERFAUST:
+	case WP_Q3_ROCKET_LAUNCHER:
 		CG_StartShakeCamera( 0.05, 700, cg.snap->ps.origin, 100 );
 		break;
 	case WP_VENOM:
@@ -6172,6 +6177,7 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 	case WP_PANZERFAUST:
     case WP_AIRSTRIKE:
 	case WP_ARTY:
+	case WP_Q3_ROCKET_LAUNCHER:
 		sfx = cgs.media.sfx_rockexp;
 		sfx2 = cgs.media.sfx_rockexpDist;
 		sfx2range = 800;
@@ -6383,6 +6389,7 @@ void CG_MissileHitPlayer( centity_t *cent, int weapon, vec3_t origin, vec3_t dir
 
 	case WP_GRENADE_LAUNCHER:
 	case WP_PANZERFAUST:
+	case WP_Q3_ROCKET_LAUNCHER:
 		// this shake is /on top/ of the shake from the impact (done in CG_MissileHitWall)
 		CG_StartShakeCamera( 0.1, 500, origin, 100 );
 		CG_MissileHitWall( weapon, 0, origin, dir, 0 );     //	(SA) modified to send missilehitwall surface parameters
