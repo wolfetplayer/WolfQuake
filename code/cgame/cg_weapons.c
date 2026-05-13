@@ -6173,11 +6173,23 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 			CG_AddDebris( origin, dir, 280, 1400, 7 + rand() % 2 );
 		}
 		break;
+	case WP_Q3_ROCKET_LAUNCHER:
+		mod = cgs.media.dishFlashModel;
+		shader = cgs.media.rocketExplosionShader;
+		sfx = cgs.media.sfx_rockexp;
+		mark = cgs.media.burnMarkShader;
+		radius = 64;
+		light = 300;
+		isSprite = qtrue;
+		duration = 1000;
+		lightColor[0] = 1;
+		lightColor[1] = 0.75;
+		lightColor[2] = 0.0;
+		break;
 	case VERYBIGEXPLOSION:
 	case WP_PANZERFAUST:
     case WP_AIRSTRIKE:
 	case WP_ARTY:
-	case WP_Q3_ROCKET_LAUNCHER:
 		sfx = cgs.media.sfx_rockexp;
 		sfx2 = cgs.media.sfx_rockexpDist;
 		sfx2range = 800;
