@@ -56,15 +56,15 @@ static int maxWeapBanks = MAX_WEAP_BANKS, maxWeapsInBank = MAX_WEAPS_IN_BANK; //
 
 int weapBanks[MAX_WEAP_BANKS][MAX_WEAPS_IN_BANK] = {
 	{0, 0, 0, 0, 0, 0},																					
-	{WP_KNIFE, WP_HOLYCROSS, 0, 0, 0},													
-	{WP_LUGER, WP_SILENCER, WP_COLT, WP_AKIMBO},				
-	{WP_MP40, WP_STEN, WP_THOMPSON, 0},													 
-	{WP_MAUSER, WP_GARAND, 0, 0},														  
-	{0, 0, 0},																  
-	{WP_FG42, 0, 0, 0},																	 
-	{WP_M97, 0, 0},																	       
-	{WP_GRENADE_LAUNCHER, WP_GRENADE_PINEAPPLE, WP_DYNAMITE, WP_AIRSTRIKE, WP_POISONGAS },
-	{WP_PANZERFAUST, WP_FLAMETHROWER, 0, 0},											  
+	{WP_KNIFE, WP_HOLYCROSS, WP_Q3_GAUNTLET, 0, 0},													
+	{WP_LUGER, WP_SILENCER, WP_COLT, WP_AKIMBO, WP_Q3_MACHINEGUN},				
+	{WP_MP40, WP_STEN, WP_THOMPSON, WP_Q3_SHOTGUN},													 
+	{WP_MAUSER, WP_GARAND, WP_Q3_GRENADE_LAUNCHER, 0},														  
+	{WP_Q3_ROCKET_LAUNCHER, 0, 0},																  
+	{WP_FG42, WP_Q3_LIGHTNING, 0, 0},																	 
+	{WP_M97, WP_Q3_RAILGUN, 0},																	       
+	{WP_GRENADE_LAUNCHER, WP_GRENADE_PINEAPPLE, WP_DYNAMITE, WP_AIRSTRIKE, WP_POISONGAS, WP_Q3_PLASMAGUN },
+	{WP_PANZERFAUST, WP_FLAMETHROWER, WP_Q3_BFG, 0},											  
 	{WP_VENOM, WP_TESLA, 0, 0, 0, 0}																		 
 };
 

@@ -527,30 +527,31 @@ typedef enum
 // SA NOTE: should be 31 now (I added 1 bit in msg.c)
 typedef enum {
 	WP_NONE,                
-	// Melee Weapons
 	WP_KNIFE,          
-	// Pistols
 	WP_LUGER,              
 	WP_SILENCER,           
     WP_COLT,                          
 	WP_AKIMBO,          
-	// SMGs
 	WP_MP40,             
 	WP_THOMPSON,         
 	WP_STEN,                                    
-	// Rifles
 	WP_MAUSER,                    
 	WP_GARAND,            
-	// Assault Rifles
 	WP_FG42,
-	// Shotguns
 	WP_M97,
-	// Heavy Weapons
 	WP_PANZERFAUST,
 	WP_FLAMETHROWER,
-	// Secret Weapons
 	WP_VENOM,
-	WP_TESLA,   
+	WP_TESLA,
+	WP_Q3_GAUNTLET,
+	WP_Q3_MACHINEGUN,
+	WP_Q3_SHOTGUN,
+	WP_Q3_GRENADE_LAUNCHER,
+	WP_Q3_ROCKET_LAUNCHER,
+	WP_Q3_LIGHTNING,
+	WP_Q3_RAILGUN,
+	WP_Q3_PLASMAGUN,
+	WP_Q3_BFG,   
 	// Explosives
 	WP_GRENADE_LAUNCHER,
     WP_GRENADE_PINEAPPLE,
