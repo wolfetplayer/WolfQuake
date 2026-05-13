@@ -1,4 +1,4 @@
-# RealRTCW
+# WolfQuake
 
 **RealRTCW** is a community-driven single-player overhaul for **Return to Castle Wolfenstein**, built on top of the original **iortcw** and **rtcw-sp** source code.
 
