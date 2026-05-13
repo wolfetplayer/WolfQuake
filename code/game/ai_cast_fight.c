@@ -507,12 +507,9 @@ float AICast_WeaponRange(cast_state_t *cs, int weaponnum) {
         return 8000.0f;
 
 	case WP_M97:
-	case WP_AUTO5:
-	case WP_M30:
 	    return 475.0f;
     case WP_GRENADE_LAUNCHER:
     case WP_GRENADE_PINEAPPLE:
-	case WP_SMOKE_BOMB:
         return 800.0f;
 
     case WP_MONSTER_ATTACK1:
@@ -572,12 +569,7 @@ float AICast_WeaponRange(cast_state_t *cs, int weaponnum) {
     case WP_GARAND:
     case WP_SNIPERRIFLE:
     case WP_SNOOPERSCOPE:
-    case WP_M1941SCOPE:
         return 8000.0f;
-
-    case WP_DELISLE:
-    case WP_DELISLESCOPE:
-        return 5000.0f;
 
     case WP_VENOM: {
         // Provide explicit fallback for unknown characters when using Venom
@@ -977,7 +969,6 @@ qboolean AICast_WeaponUsable( cast_state_t *cs, int weaponNum ) {
 		// don't attempt to lob a grenade more than this often, since we will abort a grenade
 		// throw if it's not safe, we shouldn't keep switching back too quickly
 	case WP_DYNAMITE:
-	case WP_DYNAMITE_ENG:
 	case WP_GRENADE_LAUNCHER:
 	case WP_GRENADE_PINEAPPLE:
 		if ( cs->enemyNum < 0 ) {
@@ -1626,10 +1617,6 @@ qboolean AICast_CanMoveWhileFiringWeapon(int weaponnum ) {
 
 	switch ( weaponnum ) {
 	case WP_MAUSER:
-	case WP_DELISLE:
-	case WP_DELISLESCOPE:
-	case WP_M1941SCOPE:
-	case WP_MOSIN:
 	case WP_GARAND:
 	case WP_SNIPERRIFLE:    //----(SA)	added
 	case WP_SNOOPERSCOPE:   //----(SA)	added
@@ -1980,7 +1967,7 @@ float AICast_GetAccuracy( int entnum ) {
 	// the more they stay in our sights, the more accurate we get
     
 	// RealRTCW - extra accuracy for guys with bolt action rifles
-	if (cs->weaponNum == WP_MAUSER || cs->weaponNum == WP_SNIPERRIFLE || cs->weaponNum == WP_DELISLE || cs->weaponNum == WP_DELISLESCOPE || cs->weaponNum == WP_M1941SCOPE || cs->weaponNum == WP_GARAND || cs->weaponNum == WP_SNOOPERSCOPE || cs->weaponNum == WP_MOSIN ) {
+	if (cs->weaponNum == WP_MAUSER || cs->weaponNum == WP_SNIPERRIFLE || cs->weaponNum == WP_GARAND || cs->weaponNum == WP_SNOOPERSCOPE ) {
 		acc = cs->attributes[AIM_ACCURACY] + 0.2;
 	    } else {
 	    acc = cs->attributes[AIM_ACCURACY];

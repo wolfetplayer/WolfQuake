@@ -848,48 +848,11 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 		}
 	}
 
-	if (( weapon == WP_PPSH ) && strstr (level.scriptAI, "Factory"))
-	{
-	if ( !g_cheats.integer ) 
-	{
-    steamSetAchievement("ACH_PPSH");
-	}
-	}
-
-	if (( weapon == WP_MOSIN ) && strstr (level.scriptAI, "Village2_118"))
-	{
-	if ( !g_cheats.integer ) 
-	{
-    steamSetAchievement("ACH_MOSIN");
-	}
-	}
-
-	if (( weapon == WP_TESLA ) && strstr (level.scriptAI, "Escape #2"))
-	{
-	if ( !g_cheats.integer ) 
-	{
-    steamSetAchievement("ACH_WINTERSTEIN_TESLA");
-	}
-	}
-
-	if (( weapon == WP_REVOLVER ) && strstr (level.scriptAI, "Escape #2"))
-	{
-	if ( !g_cheats.integer ) 
-	{
-    steamSetAchievement("ACH_AGENT1");
-	}
-	}
 
 	// check for special colt->akimbo add (if you've got a colt already, add the second now)
 	if ( weapon == WP_COLT ) {
 		if ( COM_BitCheck( other->client->ps.weapons, WP_COLT ) ) {
 			weapon = WP_AKIMBO;
-		}
-	}
-
-		if ( weapon == WP_TT33 ) {
-		if ( COM_BitCheck( other->client->ps.weapons, WP_TT33 ) ) {
-			weapon = WP_DUAL_TT33;
 		}
 	}
 
@@ -923,14 +886,6 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 		COM_BitSet( other->client->ps.weapons, WP_FG42SCOPE );
 	} else if ( weapon == WP_SNIPERRIFLE ) {
 		COM_BitSet( other->client->ps.weapons, WP_MAUSER );
-	} else if ( weapon == WP_M1GARAND ) {
-		COM_BitSet( other->client->ps.weapons, WP_M7 );
-	} else if ( weapon == WP_M7 ) {
-		COM_BitSet( other->client->ps.weapons, WP_M1GARAND );
-	} else if ( weapon == WP_DELISLESCOPE ) {
-		COM_BitSet( other->client->ps.weapons, WP_DELISLE );
-	} else if ( weapon == WP_M1941SCOPE ) {
-		COM_BitSet( other->client->ps.weapons, WP_M1941 );
 	}
 	
 	Add_Ammo( other, weapon, quantity, !alreadyHave );
@@ -995,12 +950,8 @@ weapon_t GetComplexWeapon( weapon_t weapon ) {
 	{
 	case WP_GARAND:
 	case WP_FG42:
-	case WP_M1GARAND:
 	case WP_COLT:
-	case WP_TT33:
 	case WP_MAUSER:
-	case WP_DELISLE:
-	case WP_M1941:
 		return GetWeaponTableData( weapon )->weapAlts;
 	default:
 		return weapon;
@@ -1012,10 +963,7 @@ weapon_t GetSimpleWeapon( weapon_t weapon ) {
 	{
 	case WP_SNOOPERSCOPE:
 	case WP_FG42SCOPE:
-	case WP_M7:
 	case WP_SNIPERRIFLE:
-	case WP_DELISLESCOPE:
-	case WP_M1941SCOPE:
 		return GetWeaponTableData( weapon )->weapAlts;
 	default:
 		return weapon;
@@ -1028,16 +976,12 @@ qboolean IsWeaponComplex( weapon_t weapon ) {
 	
 	case WP_GARAND:
 	case WP_FG42:
-	case WP_M1GARAND:
 
 	case WP_SNOOPERSCOPE:
 	case WP_FG42SCOPE:
-	case WP_M7:
 
 	// semi complex
 	case WP_SNIPERRIFLE:
-	case WP_DELISLESCOPE:
-	case WP_M1941SCOPE:
 		return qtrue;
 	default:
 		return qfalse;
@@ -1182,29 +1126,7 @@ void G_DropWeapon( gentity_t *ent, weapon_t weapon ) {
 //======================================================================
 
 qboolean Give_Weapon_New_Inventory( gentity_t *other, weapon_t weapon, qboolean needThrowItem ) {
-	if ( ( weapon == WP_PPSH ) && strstr ( level.scriptAI, "Factory" ) ) {
-		if ( !g_cheats.integer ) {
-			steamSetAchievement( "ACH_PPSH" );
-		}
-	}
 
-	if ( ( weapon == WP_MOSIN ) && strstr ( level.scriptAI, "Village2_118" ) ) {
-		if ( !g_cheats.integer ) {
-			steamSetAchievement( "ACH_MOSIN" );
-		}
-	}
-
-	if ( ( weapon == WP_TESLA ) && strstr ( level.scriptAI, "Escape #2" ) ) {
-		if ( !g_cheats.integer ) {
-			steamSetAchievement( "ACH_WINTERSTEIN_TESLA" );
-		}
-	}
-
-	if ( ( weapon == WP_REVOLVER ) && strstr ( level.scriptAI, "Escape #2") ) {
-		if ( !g_cheats.integer ) {
-			steamSetAchievement( "ACH_AGENT1" );
-		}
-	}
 
 	if ( !COM_BitCheck( other->client->ps.weapons, weapon ) ) {
 		if ( IsThereEmptySlot( other ) || IsUpgradingWeapon( other, weapon ) || other->client->latched_buttons & BUTTON_ACTIVATE ) {
@@ -1326,12 +1248,6 @@ int Pickup_Weapon_New_Inventory( gentity_t *ent, gentity_t *other ) {
 	if ( weapon == WP_COLT ) {
 		if ( COM_BitCheck( other->client->ps.weapons, WP_COLT ) ) {
 			weapon = WP_AKIMBO;
-		}
-	}
-
-	if ( weapon == WP_TT33 ) {
-		if ( COM_BitCheck( other->client->ps.weapons, WP_TT33 ) ) {
-			weapon = WP_DUAL_TT33;
 		}
 	}
 
@@ -1888,63 +1804,6 @@ void FinishSpawningItem( gentity_t *ent ) {
 	}
 
 	if ( g_nopickupchallenge.integer && ent->item->giType == IT_ARMOR )
-	{
-    return;
-	}
-
-    // Classic arsenal
-	if ( g_fullarsenal.integer == 0 && (   ent->item->giWeapon == WP_MP34 
-	                                || ent->item->giWeapon == WP_REVOLVER 
-									|| ent->item->giWeapon == WP_G43 
-									|| ent->item->giWeapon == WP_M1GARAND 
-									|| ent->item->giWeapon == WP_BAR 
-									|| ent->item->giWeapon == WP_MG42M
-									|| ent->item->giWeapon == WP_M97
-									|| ent->item->giWeapon == WP_MP44
-									|| ent->item->giWeapon == WP_M7
-									|| ent->item->giWeapon == WP_BROWNING ) )
-	{
-    return;
-	}
-       
-    // No new ammo types too
-	if ( g_fullarsenal.integer == 0 && ent->item->giType == IT_AMMO && (
-		ent->item->giAmmoIndex == WP_MP44 || 
-		ent->item->giAmmoIndex == WP_M97 || 
-		ent->item->giAmmoIndex == WP_BAR || 
-		ent->item->giAmmoIndex == WP_REVOLVER)) 
-	{
-	return;
-	} 
-
-    // Classic Tides of War arsenal
-	if ( g_fullarsenal.integer == 2 && (   ent->item->giWeapon == WP_MP34 
-	                                || ent->item->giWeapon == WP_REVOLVER 
-									|| ent->item->giWeapon == WP_G43 
-									|| ent->item->giWeapon == WP_M1GARAND 
-									|| ent->item->giWeapon == WP_BAR 
-									|| ent->item->giWeapon == WP_MG42M
-									|| ent->item->giWeapon == WP_MP44
-									|| ent->item->giWeapon == WP_M7
-									|| ent->item->giWeapon == WP_BROWNING ) )
-	{
-    return;
-	}
-
-    // No new ammo types too Classic Tides of War
-	if ( g_fullarsenal.integer == 2 && ent->item->giType == IT_AMMO && (
-		ent->item->giAmmoIndex == WP_MP44 || 
-		ent->item->giAmmoIndex == WP_BAR || 
-		ent->item->giAmmoIndex == WP_REVOLVER)) 
-	{
-	return;
-	} 
-    
-	// RealRTCW arsenal without extra guns, value 2 will ge everything
-	if ( !g_dlc1.integer && ( ent->item->giWeapon == WP_M1941SCOPE
-									|| ent->item->giWeapon == WP_DELISLE
-									|| ent->item->giWeapon == WP_M1941
-									|| ent->item->giWeapon == WP_AUTO5 ) )
 	{
     return;
 	}

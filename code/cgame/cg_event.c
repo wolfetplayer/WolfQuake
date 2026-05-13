@@ -286,12 +286,6 @@ static void CG_ItemPickup( int itemNum ) {
 			}
 		}
 
-		if ( weapon == WP_TT33 ) {
-			if ( COM_BitCheck( cg.snap->ps.weapons, weapon ) ) {
-				weapon = WP_DUAL_TT33; // you have TT33, now get DUAL TT33(second)
-			}
-		}
-
 		if ( cg_autoswitch.integer && cg.predictedPlayerState.weaponstate != WEAPON_RELOADING ) {
 
 			//	0 - "Off"
@@ -301,12 +295,12 @@ static void CG_ItemPickup( int itemNum ) {
 			//	4 - "New or Better"
 			//	5 - "New and Better"
 
-			if ( weapon == WP_SNIPERRIFLE || weapon == WP_SNOOPERSCOPE || weapon == WP_FG42SCOPE || weapon == WP_DELISLESCOPE || weapon == WP_M1941SCOPE ) {
+			if ( weapon == WP_SNIPERRIFLE || weapon == WP_SNOOPERSCOPE || weapon == WP_FG42SCOPE ) {
 				weapon = GetWeaponTableData( weapon )->weapAlts;
 			}
 
 			// don't ever autoswitch to secondary fire weapons
-			if ( weapon != WP_SNIPERRIFLE && weapon != WP_SNOOPERSCOPE && weapon != WP_FG42SCOPE && weapon != WP_DELISLESCOPE && weapon != WP_M1941SCOPE ) {  //----(SA)	modified
+			if ( weapon != WP_SNIPERRIFLE && weapon != WP_SNOOPERSCOPE && weapon != WP_FG42SCOPE ) {  //----(SA)	modified
 
 				// no weap currently selected, always just select the new one
 				if ( !cg.weaponSelect ) {
@@ -1875,7 +1869,7 @@ case EV_FILL_CLIP_FULL:
 	case EV_NOAMMO:
 		DEBUGNAME( "EV_NOAMMO" );
 		CG_ResetSimpleZoom();
-		if ( ( es->weapon != WP_GRENADE_LAUNCHER ) && ( es->weapon != WP_GRENADE_PINEAPPLE ) && ( es->weapon != WP_SMOKE_BOMB ) && ( es->weapon != WP_DYNAMITE )  && ( es->weapon != WP_DYNAMITE_ENG ) && ( es->weapon != WP_AIRSTRIKE ) && ( es->weapon != WP_POISONGAS )  ) {
+		if ( ( es->weapon != WP_GRENADE_LAUNCHER ) && ( es->weapon != WP_GRENADE_PINEAPPLE ) && ( es->weapon != WP_DYNAMITE ) && ( es->weapon != WP_AIRSTRIKE ) && ( es->weapon != WP_POISONGAS )  ) {
 			trap_S_StartSound( NULL, es->number, CHAN_AUTO, cgs.media.noAmmoSound );
 		}
 		if ( es->number == cg.snap->ps.clientNum && cg_autoReload.integer == 1 ) {
@@ -1904,12 +1898,6 @@ case EV_FILL_CLIP_FULL:
 			break;
 		case WP_SNIPERRIFLE:
 			newweap = WP_MAUSER;
-			break;
-		case WP_DELISLESCOPE:
-			newweap = WP_DELISLE;
-			break;
-		case WP_M1941SCOPE:
-			newweap = WP_M1941;
 			break;
 		case WP_FG42SCOPE:
 			newweap = WP_FG42;
@@ -2079,7 +2067,7 @@ case EV_FILL_CLIP_FULL:
 		DEBUGNAME( "EV_GRENADE_BOUNCE" );
 
 		// DYNAMITE
-		if ( es->weapon == WP_DYNAMITE || es->weapon == WP_DYNAMITE_ENG ) {
+		if ( es->weapon == WP_DYNAMITE) {
 			trap_S_StartSound( NULL, es->number, CHAN_AUTO, cgs.media.dynamitebounce1 );
 		} else {
 			int flags;

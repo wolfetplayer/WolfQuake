@@ -29,21 +29,8 @@ typedef enum {
 	M97_RELOADING_LOOP,					// Reload normal shell loop
 } m97state_t;
 
-
-// Shotgun reload states
-typedef enum {
-	AUTO5_READY,						// Not reloading
-	AUTO5_RELOADING_BEGIN,				// Reload normal shell start
-	AUTO5_RELOADING_BEGIN_PUMP,			// Reload first shell and pump start
-	AUTO5_RELOADING_AFTER_PUMP,			// Reload first shell and pump to loop
-	AUTO5_RELOADING_LOOP,			    // Reload normal shell loop
-} auto5state_t;
-
 // Functions
 void PM_BeginM97Reload ( );
 void PM_M97Reload      ( );
-
-void PM_BeginAuto5Reload ( );
-void PM_Auto5Reload      ( );
 
 #endif // GAME_JAYMOD_H

@@ -740,7 +740,7 @@ static void CG_DrawStatusBar( void ) {
 
 			// pulsing grenade icon to help the player 'count' in their head
 			if ( ps->grenadeTimeLeft ) {
-				if ( ps->weapon == WP_DYNAMITE || ps->weapon == WP_DYNAMITE_ENG  ) {
+				if ( ps->weapon == WP_DYNAMITE ) {
 
 				} else {
 					if ( ( ( cg.grenLastTime ) % 1000 ) < ( ( ps->grenadeTimeLeft ) % 1000 ) ) {
@@ -2324,136 +2324,6 @@ static void CG_DrawWeapReticle( void ) {
 		CG_FillRect( 319, 300, 2, 178, color );  // center bot
 		CG_FillRect( 380, 239, 177, 2, color );  // right
 
-	} else if ( weap == WP_DELISLESCOPE ) {
-		// sides
-		if ( cg_fixedAspect.integer ) {
-			if ( cgs.glconfig.vidWidth * 480.0 > cgs.glconfig.vidHeight * 640.0 ) {
-				mask = 0.5 * ( ( cgs.glconfig.vidWidth - ( cgs.screenXScale * 480.0 ) ) / cgs.screenXScale );
-
-				CG_SetScreenPlacement(PLACE_LEFT, PLACE_CENTER);
-				CG_FillRect( 0, 0, mask, 480, color );
-				CG_SetScreenPlacement(PLACE_RIGHT, PLACE_CENTER);
-				CG_FillRect( 640 - mask, 0, mask, 480, color );
-			} else if ( cgs.glconfig.vidWidth * 480.0 < cgs.glconfig.vidHeight * 640.0 ) {
-				// sides with letterbox
-				lb = 0.5 * ( ( cgs.glconfig.vidHeight - ( cgs.screenYScale * 480.0 ) ) / cgs.screenYScale );
-
-				CG_SetScreenPlacement(PLACE_LEFT, PLACE_CENTER);
-				CG_FillRect( 0, 0, 80, 480, color );
-				CG_SetScreenPlacement(PLACE_RIGHT, PLACE_CENTER);
-				CG_FillRect( 560, 0, 80, 480, color );
-
-				CG_SetScreenPlacement(PLACE_LEFT, PLACE_BOTTOM);
-				CG_FillRect( 0, 480 - lb, 640, lb, color );
-				CG_SetScreenPlacement(PLACE_LEFT, PLACE_TOP);
-				CG_FillRect( 0, 0, 640, lb, color );
-			} else {
-				// resolution is 4:3
-				CG_SetScreenPlacement(PLACE_LEFT, PLACE_CENTER);
-				CG_FillRect( 0, 0, 80, 480, color );
-				CG_SetScreenPlacement(PLACE_RIGHT, PLACE_CENTER);
-				CG_FillRect( 560, 0, 80, 480, color );
-			}
-		} else {
-			CG_FillRect( 0, 0, 80, 480, color );
-			CG_FillRect( 560, 0, 80, 480, color );
-		}
-
-		// center
-		if ( cg_fixedAspect.integer ) {
-			CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
-		}
-
-		if ( cgs.media.reticleShaderSimpleQ ) {
-			if ( cg_fixedAspect.integer ) {
-				trap_R_DrawStretchPic( x, lb * cgs.screenYScale, w, h, 0, 0, 1, 1, cgs.media.reticleShaderSimpleQ );         // tl
-				trap_R_DrawStretchPic( x + w, lb * cgs.screenYScale, w, h, 1, 0, 0, 1, cgs.media.reticleShaderSimpleQ );     // tr
-				trap_R_DrawStretchPic( x, h + lb * cgs.screenYScale, w, h, 0, 1, 1, 0, cgs.media.reticleShaderSimpleQ );     // bl
-				trap_R_DrawStretchPic( x + w, h + lb * cgs.screenYScale, w, h, 1, 1, 0, 0, cgs.media.reticleShaderSimpleQ ); // br
-			} else {
-				trap_R_DrawStretchPic( x, 0, w, h, 0, 0, 1, 1, cgs.media.reticleShaderSimpleQ );      // tl
-				trap_R_DrawStretchPic( x + w, 0, w, h, 1, 0, 0, 1, cgs.media.reticleShaderSimpleQ );  // tr
-				trap_R_DrawStretchPic( x, h, w, h, 0, 1, 1, 0, cgs.media.reticleShaderSimpleQ );      // bl
-				trap_R_DrawStretchPic( x + w, h, w, h, 1, 1, 0, 0, cgs.media.reticleShaderSimpleQ );  // br
-			}
-		}
-
-		if ( cg_drawCrosshairReticle.integer ) {
-			CG_FillRect( 80, 239, 480, 1, color );	// horiz
-			CG_FillRect( 319, 0, 1, 480, color );   // vert
-		}
-
-		// hairs
-		CG_FillRect( 84, 239, 177, 2, color );   // left
-		CG_FillRect( 320, 242, 1, 58, color );   // center top
-		CG_FillRect( 319, 300, 2, 178, color );  // center bot
-		CG_FillRect( 380, 239, 177, 2, color );  // right
-
-	} else if ( weap == WP_M1941SCOPE ) {
-		// sides
-		if ( cg_fixedAspect.integer ) {
-			if ( cgs.glconfig.vidWidth * 480.0 > cgs.glconfig.vidHeight * 640.0 ) {
-				mask = 0.5 * ( ( cgs.glconfig.vidWidth - ( cgs.screenXScale * 480.0 ) ) / cgs.screenXScale );
-
-				CG_SetScreenPlacement(PLACE_LEFT, PLACE_CENTER);
-				CG_FillRect( 0, 0, mask, 480, color );
-				CG_SetScreenPlacement(PLACE_RIGHT, PLACE_CENTER);
-				CG_FillRect( 640 - mask, 0, mask, 480, color );
-			} else if ( cgs.glconfig.vidWidth * 480.0 < cgs.glconfig.vidHeight * 640.0 ) {
-				// sides with letterbox
-				lb = 0.5 * ( ( cgs.glconfig.vidHeight - ( cgs.screenYScale * 480.0 ) ) / cgs.screenYScale );
-
-				CG_SetScreenPlacement(PLACE_LEFT, PLACE_CENTER);
-				CG_FillRect( 0, 0, 80, 480, color );
-				CG_SetScreenPlacement(PLACE_RIGHT, PLACE_CENTER);
-				CG_FillRect( 560, 0, 80, 480, color );
-
-				CG_SetScreenPlacement(PLACE_LEFT, PLACE_BOTTOM);
-				CG_FillRect( 0, 480 - lb, 640, lb, color );
-				CG_SetScreenPlacement(PLACE_LEFT, PLACE_TOP);
-				CG_FillRect( 0, 0, 640, lb, color );
-			} else {
-				// resolution is 4:3
-				CG_SetScreenPlacement(PLACE_LEFT, PLACE_CENTER);
-				CG_FillRect( 0, 0, 80, 480, color );
-				CG_SetScreenPlacement(PLACE_RIGHT, PLACE_CENTER);
-				CG_FillRect( 560, 0, 80, 480, color );
-			}
-		} else {
-			CG_FillRect( 0, 0, 80, 480, color );
-			CG_FillRect( 560, 0, 80, 480, color );
-		}
-
-		// center
-		if ( cg_fixedAspect.integer ) {
-			CG_SetScreenPlacement(PLACE_CENTER, PLACE_CENTER);
-		}
-
-		if ( cgs.media.reticleShaderSimpleQ ) {
-			if ( cg_fixedAspect.integer ) {
-				trap_R_DrawStretchPic( x, lb * cgs.screenYScale, w, h, 0, 0, 1, 1, cgs.media.reticleShaderSimpleQ );         // tl
-				trap_R_DrawStretchPic( x + w, lb * cgs.screenYScale, w, h, 1, 0, 0, 1, cgs.media.reticleShaderSimpleQ );     // tr
-				trap_R_DrawStretchPic( x, h + lb * cgs.screenYScale, w, h, 0, 1, 1, 0, cgs.media.reticleShaderSimpleQ );     // bl
-				trap_R_DrawStretchPic( x + w, h + lb * cgs.screenYScale, w, h, 1, 1, 0, 0, cgs.media.reticleShaderSimpleQ ); // br
-			} else {
-				trap_R_DrawStretchPic( x, 0, w, h, 0, 0, 1, 1, cgs.media.reticleShaderSimpleQ );      // tl
-				trap_R_DrawStretchPic( x + w, 0, w, h, 1, 0, 0, 1, cgs.media.reticleShaderSimpleQ );  // tr
-				trap_R_DrawStretchPic( x, h, w, h, 0, 1, 1, 0, cgs.media.reticleShaderSimpleQ );      // bl
-				trap_R_DrawStretchPic( x + w, h, w, h, 1, 1, 0, 0, cgs.media.reticleShaderSimpleQ );  // br
-			}
-		}
-
-		if ( cg_drawCrosshairReticle.integer ) {
-			CG_FillRect( 80, 239, 480, 1, color );	// horiz
-			CG_FillRect( 319, 0, 1, 480, color );   // vert
-		}
-
-		// hairs
-		CG_FillRect( 84, 239, 177, 2, color );   // left
-		CG_FillRect( 320, 242, 1, 58, color );   // center top
-		CG_FillRect( 319, 300, 2, 178, color );  // center bot
-		CG_FillRect( 380, 239, 177, 2, color );  // right
-
 	}  else if ( weap == WP_SNOOPERSCOPE ) {
 		// sides
 		if ( cg_fixedAspect.integer ) {
@@ -2751,8 +2621,6 @@ static void CG_DrawCrosshair( void ) {
 	case WP_SNIPERRIFLE:
 	case WP_SNOOPERSCOPE:
 	case WP_FG42SCOPE:
-	case WP_DELISLESCOPE:
-	case WP_M1941SCOPE:
 		if ( !( cg.snap->ps.eFlags & EF_MG42_ACTIVE ) ) {
 			CG_DrawWeapReticle();
 			return;
@@ -2771,24 +2639,6 @@ static void CG_DrawCrosshair( void ) {
 	// mauser only gets crosshair if you don't have the scope (I don't like this, but it's a test)
 	if ( cg.weaponSelect == WP_MAUSER ) {
 		if ( COM_BitCheck( cg.predictedPlayerState.weapons, WP_SNIPERRIFLE ) ) {
-		if ( !cg_snipersCrosshair.integer ) 
-	    {
-		return;
-	    }
-		}
-	}
-
-	if ( cg.weaponSelect == WP_DELISLE ) {
-		if ( COM_BitCheck( cg.predictedPlayerState.weapons, WP_DELISLESCOPE ) ) {
-		if ( !cg_snipersCrosshair.integer ) 
-	    {
-		return;
-	    }
-		}
-	}
-
-	if ( cg.weaponSelect == WP_M1941 ) {
-		if ( COM_BitCheck( cg.predictedPlayerState.weapons, WP_M1941SCOPE ) ) {
 		if ( !cg_snipersCrosshair.integer ) 
 	    {
 		return;
@@ -2968,8 +2818,6 @@ static void CG_DrawCrosshair3D( void ) {
 	case WP_SNIPERRIFLE:
 	case WP_SNOOPERSCOPE:
 	case WP_FG42SCOPE:
-	case WP_DELISLESCOPE:
-	case WP_M1941SCOPE:
 		if ( !( cg.snap->ps.eFlags & EF_MG42_ACTIVE ) ) {
 			CG_DrawWeapReticle();
 			return;
@@ -2988,24 +2836,6 @@ static void CG_DrawCrosshair3D( void ) {
 	// mauser only gets crosshair if you don't have the scope (I don't like this, but it's a test)
 	if ( cg.weaponSelect == WP_MAUSER ) {
 		if ( COM_BitCheck( cg.predictedPlayerState.weapons, WP_SNIPERRIFLE ) ) {
-		if ( !cg_snipersCrosshair.integer ) 
-	    {
-		return;
-	    }
-		}
-	}
-
-	if ( cg.weaponSelect == WP_DELISLE ) {
-		if ( COM_BitCheck( cg.predictedPlayerState.weapons, WP_DELISLESCOPE ) ) {
-		if ( !cg_snipersCrosshair.integer ) 
-	    {
-		return;
-	    }
-		}
-	}
-
-		if ( cg.weaponSelect == WP_M1941) {
-		if ( COM_BitCheck( cg.predictedPlayerState.weapons, WP_M1941SCOPE ) ) {
 		if ( !cg_snipersCrosshair.integer ) 
 	    {
 		return;
@@ -3269,7 +3099,7 @@ static void CG_DrawDynamiteStatus( void ) {
 	int timeleft;
 	float w;
 
-	if ( cg.snap->ps.weapon != WP_DYNAMITE && cg.snap->ps.weapon != WP_DYNAMITE_ENG ) {
+	if ( cg.snap->ps.weapon != WP_DYNAMITE ) {
 		return;
 	}
 
@@ -4400,8 +4230,6 @@ static qboolean isChargeBased( int weap ) {
 	switch ( weap ) {
 	case WP_AIRSTRIKE:
 	case WP_POISONGAS:
-	case WP_DYNAMITE_ENG:
-	case WP_SMOKE_BOMB:
 		return qtrue;
 	}
 	return qfalse;
@@ -4435,38 +4263,20 @@ int CG_CollectWeaponWheelWeapons( int *visibleWeapons, int maxWeapons ) {
 		case WP_SILENCER:
 		case WP_COLT:
 		case WP_AKIMBO:
-		case WP_TT33:
-		case WP_DUAL_TT33:
-		case WP_REVOLVER:
-		case WP_HDM:
 
 		case WP_MP40:
-		case WP_MP34:
 		case WP_STEN:
 		case WP_THOMPSON:
-		case WP_PPSH:
 
 		case WP_MAUSER:
 		case WP_GARAND:
-		case WP_MOSIN:
-		case WP_DELISLE:
-
-		case WP_G43:
-		case WP_M1GARAND:
-		case WP_M1941:
 
 		case WP_FG42:
-		case WP_MP44:
-		case WP_BAR:
 
 		case WP_M97:
-		case WP_AUTO5:
-		case WP_M30:
 
 		case WP_PANZERFAUST:
 		case WP_FLAMETHROWER:
-		case WP_MG42M:
-		case WP_BROWNING:
 
 		case WP_VENOM:
 		case WP_TESLA:
@@ -4475,9 +4285,7 @@ int CG_CollectWeaponWheelWeapons( int *visibleWeapons, int maxWeapons ) {
 		case WP_POISONGAS:
 		case WP_GRENADE_PINEAPPLE:
 		case WP_DYNAMITE:
-		case WP_DYNAMITE_ENG:
 		case WP_AIRSTRIKE:
-		case WP_SMOKE_BOMB:
 			break;
 
 		default:
@@ -4623,21 +4431,9 @@ void CG_DrawWeaponWheel( void ) {
 		switch ( weap ) {
 		case WP_THOMPSON:
 		case WP_MP40:
-		case WP_MP34:
-		case WP_PPSH:
-		case WP_MOSIN:
-		case WP_G43:
-		case WP_M1GARAND:
-		case WP_BAR:
-		case WP_M30:
-		case WP_MP44:
-		case WP_MG42M:
 		case WP_M97:
-		case WP_AUTO5:
-		case WP_BROWNING:
 		case WP_STEN:
 		case WP_MAUSER:
-		case WP_DELISLE:
 		case WP_GARAND:
 		case WP_VENOM:
 		case WP_TESLA:
@@ -4645,7 +4441,6 @@ void CG_DrawWeaponWheel( void ) {
 		case WP_FLAMETHROWER:
 		case WP_FG42:
 		case WP_FG42SCOPE:
-		case WP_M1941:
 			wideweap = qtrue;
 			break;
 		default:

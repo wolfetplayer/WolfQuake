@@ -64,14 +64,6 @@ qboolean G_BounceMissile( gentity_t *ent, trace_t *trace ) {
 	}
 */
 
-	if ( ent->s.weapon == WP_M7 ) {
-		ent->s.effect1Time = qtrue; // has bounced
-
-		if ( ( ent->nextthink - level.time ) < 3250 ) {
-			G_ExplodeMissile( ent );
-			return qfalse;
-		}
-	}
 
 	contents = trap_PointContents( ent->s.origin, -1 );
 
@@ -134,28 +126,9 @@ qboolean G_BounceMissile( gentity_t *ent, trace_t *trace ) {
 
 			}
 
-			if ( ent->s.weapon == WP_DYNAMITE_ENG ) {
-				ent->r.ownerNum = ENTITYNUM_WORLD;
-
-				// make shootable
-					ent->health             = 5;
-					ent->takedamage         = qtrue;
-
-					// small target cube
-					VectorSet( ent->r.mins, -4, -4, 0 );
-					VectorCopy( ent->r.mins, ent->r.absmin );
-					VectorSet( ent->r.maxs, 4, 4, 8 );
-					VectorCopy( ent->r.maxs, ent->r.absmax );
-				
-
-			}
 //----(SA)	end
 			G_SetOrigin( ent, trace->endpos );
 			ent->s.time = level.time / 4;
-					if ( ent->s.weapon == WP_M7  ) {
-				// explode one 750msecs after launchtime
-				ent->nextthink = level.time + ( 750 - ( level.time + 4000 - ent->nextthink ) );
-			}
 			return qfalse;
 		}
 	}
@@ -902,7 +875,7 @@ gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t dir, int grenadeW
 
 	// no self->client for shooter_grenade's
 	if ( self->client && self->client->ps.grenadeTimeLeft ) {
-		if ( grenadeWPID == WP_DYNAMITE || grenadeWPID == WP_DYNAMITE_ENG ) {   // remove any fraction of a 5 second 'click'
+		if ( grenadeWPID == WP_DYNAMITE ) {   // remove any fraction of a 5 second 'click'
 			self->client->ps.grenadeTimeLeft *= 5;
 			self->client->ps.grenadeTimeLeft -= ( self->client->ps.grenadeTimeLeft % 5000 );
 			self->client->ps.grenadeTimeLeft += 5000;
@@ -915,7 +888,7 @@ gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t dir, int grenadeW
 		}
 	} else {
 		// let non-players throw the default duration
-		if ( grenadeWPID == WP_DYNAMITE || grenadeWPID == WP_DYNAMITE_ENG ) {
+		if ( grenadeWPID == WP_DYNAMITE ) {
 			if ( !noExplode ) {
 				bolt->nextthink = level.time + 5000;
 			}
@@ -999,28 +972,6 @@ gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t dir, int grenadeW
 		}
 
 		break;
-	case WP_M7:
-		bolt->classname             = "m7_grenade";
-		if ( self->aiCharacter ) {
-			bolt->splashRadius          = ammoTable[WP_M7].aiSplashRadius;	
-		} else {
-			bolt->splashRadius          = ammoTable[WP_M7].playerSplashRadius;
-		}
-		bolt->methodOfDeath         = MOD_M7;
-		bolt->splashMethodOfDeath   = MOD_M7;
-		bolt->s.eFlags              = EF_BOUNCE_HALF | EF_BOUNCE;
-		bolt->nextthink             = level.time + 4000;
-
-		// Soldier explosive bonus (Survival mode only)
-		if (g_gametype.integer == GT_SURVIVAL &&
-			self->client &&
-			self->client->ps.stats[STAT_PLAYER_CLASS] == PC_SOLDIER)
-		{
-
-			bolt->splashRadius *= svParams.soldierExplosiveDmgBonus;
-		}
-
-		break;
 	case WP_AIRSTRIKE:
 		bolt->classname             = "grenade";
 		if ( self->aiCharacter ) {
@@ -1035,13 +986,6 @@ gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t dir, int grenadeW
 			bolt->s.eFlags				= EF_BOUNCE_HALF;
 			bolt->methodOfDeath			= MOD_POISONGAS;
 			break;
-	case WP_SMOKE_BOMB:
-		// xkan 11/25/2002, fixed typo, classname used to be "somke_bomb"
-		bolt->classname             = "smoke_bomb";
-		bolt->s.eFlags              = EF_BOUNCE_HALF;
-		// rain - this is supposed to be MOD_SMOKEBOMB, not SMOKEGRENADE
-		bolt->methodOfDeath         = MOD_SMOKEBOMB;
-		break;
 	case WP_DYNAMITE:
 		// oh, this is /so/ cheap...
 		// you need to pick up new code ;)
@@ -1052,32 +996,6 @@ gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t dir, int grenadeW
 			bolt->splashRadius          = ammoTable[WP_DYNAMITE].aiSplashRadius;
 		} else {
 			bolt->splashRadius          = ammoTable[WP_DYNAMITE].playerSplashRadius;
-		}
-		bolt->methodOfDeath         = MOD_DYNAMITE;
-		bolt->splashMethodOfDeath   = MOD_DYNAMITE_SPLASH;
-		bolt->s.eFlags              = ( EF_BOUNCE | EF_BOUNCE_HALF );   // EF_BOUNCE_HEAVY;
-
-		bolt->health                = 5;
-		bolt->takedamage            = qfalse;
-		
-		bolt->die                   = G_MissileDie;
-		bolt->r.contents            = CONTENTS_CORPSE;      // (player can walk through)
-
-		// nope - this causes the dynamite to impact on the players bb when he throws it.
-		// will try setting it when it settles
-//			bolt->r.ownerNum			= ENTITYNUM_WORLD;	// (SA) make the world the owner of the dynamite, so the player can shoot it without modifying the bullet code to ignore players id for hits
-
-		break;
-		case WP_DYNAMITE_ENG:
-		// oh, this is /so/ cheap...
-		// you need to pick up new code ;)
-		trap_SendServerCommand( self - g_entities, va( "dp %d", ( bolt->nextthink - level.time ) / 1000 ) );
-		bolt->classname             = "dynamite";
-		bolt->damage                = 0;
-		if ( self->aiCharacter ) {
-			bolt->splashRadius          = ammoTable[WP_DYNAMITE_ENG].aiSplashRadius;
-		} else {
-			bolt->splashRadius          = ammoTable[WP_DYNAMITE_ENG].playerSplashRadius;
 		}
 		bolt->methodOfDeath         = MOD_DYNAMITE;
 		bolt->splashMethodOfDeath   = MOD_DYNAMITE_SPLASH;

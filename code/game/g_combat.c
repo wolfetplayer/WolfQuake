@@ -664,9 +664,8 @@ qboolean IsHeadShotWeapon( int mod, gentity_t *targ, gentity_t *attacker ) {
 	    if ( attacker->aiCharacter ) {
 		// ai's are always allowed headshots from these weapons
 		   if ( mod == MOD_SNIPERRIFLE ||
-			    mod == MOD_SNOOPERSCOPE ||
-			    mod == MOD_DELISLESCOPE ||
-				mod == MOD_M1941SCOPE ) {
+			    mod == MOD_SNOOPERSCOPE
+			     ) {
 			    return qtrue;
 		        }
 		return qfalse;
@@ -704,19 +703,7 @@ qboolean IsHeadShotWeapon( int mod, gentity_t *targ, gentity_t *attacker ) {
 	case MOD_LUGER:
 	case MOD_COLT:
 	case MOD_AKIMBO:
-	case MOD_DUAL_TT33:
 	case MOD_MP40:
-	case MOD_MP34:
-	case MOD_TT33:
-	case MOD_HDM:
-	case MOD_PPSH:
-	case MOD_MOSIN:
-	case MOD_G43:
-	case MOD_M1941:
-	case MOD_M1GARAND:
-	case MOD_BAR:
-	case MOD_MP44:
-	case MOD_REVOLVER:
 	case MOD_THOMPSON:
 	case MOD_STEN:
 	case MOD_FG42:
@@ -725,11 +712,8 @@ qboolean IsHeadShotWeapon( int mod, gentity_t *targ, gentity_t *attacker ) {
 	case MOD_SILENCER:
 	case MOD_FG42SCOPE:
 	case MOD_SNOOPERSCOPE:
-	case MOD_DELISLE:
 	case MOD_SNIPERRIFLE:
 	case MOD_BROWNING:
-	case MOD_MG42M:
-	case MOD_M1941SCOPE:
 	return qtrue;
 	}
 	return qfalse;
@@ -1137,8 +1121,8 @@ void G_DamageExt( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 									 mod != MOD_ROCKET_SPLASH &&
 									 mod != MOD_GRENADE &&
 									 mod != MOD_GRENADE_SPLASH &&
-									 mod != MOD_DYNAMITE &&
-									 mod != MOD_M7 ) ) {
+									 mod != MOD_DYNAMITE
+									  ) ) {
 			targ->client->ps.velocity[2] *= 0.25;
 		}
 
@@ -1218,7 +1202,7 @@ void G_DamageExt( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 
 		qboolean dynamite = (qboolean)( mod == MOD_DYNAMITE || mod == MOD_DYNAMITE_SPLASH );
 
-		qboolean shotguns = (qboolean)( mod == MOD_M97 || mod == MOD_AUTO5 );
+		qboolean shotguns = (qboolean)( mod == MOD_M97 );
 
 		qboolean panzer = (qboolean)( mod == MOD_PANZERFAUST );
 

@@ -38,44 +38,28 @@ int Survival_GetDefaultWeaponPrice(int weapon) {
 		case WP_LUGER:        return svParams.lugerPrice;
 		case WP_SILENCER:     return svParams.silencerPrice;
 		case WP_COLT:         return svParams.coltPrice;
-		case WP_TT33:         return svParams.tt33Price;
-		case WP_REVOLVER:     return svParams.revolverPrice;
-		case WP_DUAL_TT33:    return svParams.dualtt33Price;
 		case WP_AKIMBO:       return svParams.akimboPrice;
-		case WP_HDM:          return svParams.hdmPrice;
 
 		// SMGs
 		case WP_STEN:         return svParams.stenPrice;
 		case WP_MP40:         return svParams.mp40Price;
-		case WP_MP34:         return svParams.mp34Price;
 		case WP_THOMPSON:     return svParams.thompsonPrice;
-		case WP_PPSH:         return svParams.ppshPrice;
 
 		// Rifles
 		case WP_MAUSER:       return svParams.mauserPrice;
-		case WP_MOSIN:        return svParams.mosinPrice;
-		case WP_DELISLE:      return svParams.delislePrice;
 		case WP_SNIPERRIFLE:  return svParams.sniperriflePrice;
 		case WP_SNOOPERSCOPE: return svParams.snooperScopePrice;
 
 		// Auto Rifles
-		case WP_M1GARAND:     return svParams.m1garandPrice;
-		case WP_G43:          return svParams.g43Price;
-		case WP_M1941:        return svParams.m1941Price;
 
 		// Assault Rifles
-		case WP_MP44:         return svParams.mp44Price;
 		case WP_FG42:         return svParams.fg42Price;
-		case WP_BAR:          return svParams.barPrice;
 
 		// Shotguns
 		case WP_M97:          return svParams.shotgunPrice;
-		case WP_AUTO5:        return svParams.auto5Price;
 
 		// Heavy
-		case WP_MG42M:        return svParams.mg42mPrice;
 		case WP_PANZERFAUST:  return svParams.panzerPrice;
-		case WP_BROWNING:     return svParams.browningPrice;
 		case WP_FLAMETHROWER: return svParams.flamerPrice;
 		case WP_VENOM:        return svParams.venomPrice;
 		case WP_TESLA:        return svParams.teslaPrice;
@@ -97,19 +81,15 @@ qboolean Survival_HandleRandomWeaponBox(gentity_t *ent, gentity_t *activator, ch
 	if (!activator || !activator->client) return qfalse;
 
 	static const weapon_t random_box_weapons[] = {
-		WP_LUGER, WP_SILENCER, WP_COLT, WP_TT33, WP_REVOLVER, WP_DUAL_TT33,
-		WP_AKIMBO, WP_HDM, WP_MP40, WP_THOMPSON, WP_STEN, WP_PPSH, WP_MP34,
-		WP_MAUSER, WP_SNIPERRIFLE, WP_SNOOPERSCOPE, WP_MOSIN,
-		WP_M1GARAND, WP_G43, WP_MP44, WP_FG42, WP_BAR, WP_M97,
-		WP_BROWNING, WP_MG42M, WP_PANZERFAUST, WP_FLAMETHROWER, WP_VENOM, WP_TESLA
+		WP_LUGER, WP_SILENCER, WP_COLT,
+		WP_AKIMBO, WP_MP40, WP_THOMPSON, WP_STEN,
+		WP_MAUSER, WP_SNIPERRIFLE, WP_SNOOPERSCOPE, WP_FG42, WP_M97, WP_PANZERFAUST, WP_FLAMETHROWER, WP_VENOM, WP_TESLA
 	};
 
 	static const weapon_t random_box_weapons_dlc[] = {
-		WP_LUGER, WP_SILENCER, WP_COLT, WP_TT33, WP_REVOLVER, WP_DUAL_TT33,
-		WP_AKIMBO, WP_HDM, WP_MP40, WP_THOMPSON, WP_STEN, WP_PPSH, WP_MP34,
-		WP_MAUSER, WP_SNIPERRIFLE, WP_SNOOPERSCOPE, WP_MOSIN,
-		WP_M1GARAND, WP_G43, WP_M1941, WP_MP44, WP_FG42, WP_BAR, WP_M97, WP_AUTO5,
-		WP_BROWNING, WP_MG42M, WP_PANZERFAUST, WP_FLAMETHROWER, WP_VENOM, WP_TESLA, WP_DELISLE
+		WP_LUGER, WP_SILENCER, WP_COLT,
+		WP_AKIMBO, WP_MP40, WP_THOMPSON, WP_STEN,
+		WP_MAUSER, WP_SNIPERRIFLE, WP_SNOOPERSCOPE, WP_FG42, WP_M97, WP_PANZERFAUST, WP_FLAMETHROWER, WP_VENOM, WP_TESLA
 	};
 
 	const weapon_t *selected_weapons = g_dlc1.integer ? random_box_weapons_dlc : random_box_weapons;
@@ -162,14 +142,6 @@ qboolean Survival_HandleRandomWeaponBox(gentity_t *ent, gentity_t *activator, ch
 		Add_Ammo(activator, chosen, maxAmmo, qtrue);  // fill clip
 		Add_Ammo(activator, chosen, maxAmmo, qfalse); // top off reserve
 
-
-		// Bonus: give M7 for Garand
-		if (chosen == WP_M1GARAND)
-		{
-			Give_Weapon_New_Inventory(activator, WP_M7, qfalse);
-			int m7MaxAmmo = BG_GetMaxAmmo(&activator->client->ps, WP_M7, svParams.ltAmmoBonus);
-			Add_Ammo(activator, WP_M7, m7MaxAmmo, qfalse);
-		}
 
 		// Select weapon
 		activator->client->ps.weapon = chosen;
@@ -277,7 +249,7 @@ qboolean Survival_HandleAmmoPurchase(gentity_t *ent, gentity_t *activator, int p
 		return qfalse;
 
 	// Skip utility weapons
-	if (heldWeap == WP_DYNAMITE_ENG || heldWeap == WP_AIRSTRIKE || heldWeap == WP_POISONGAS || heldWeap == WP_SMOKE_BOMB)
+	if (heldWeap == WP_AIRSTRIKE || heldWeap == WP_POISONGAS)
 		return qfalse;
 
 	int ammoIndex = BG_FindAmmoForWeapon(heldWeap);
@@ -344,7 +316,7 @@ qboolean Survival_HandleWeaponUpgrade(gentity_t *ent, gentity_t *activator, int 
 		return qfalse;
 
 	// Weapons that cannot be upgraded
-	if ( weap == WP_KNIFE || weap == WP_SNIPERRIFLE || weap == WP_M1941SCOPE || weap == WP_FG42SCOPE || weap== WP_SNOOPERSCOPE || weap == WP_DELISLESCOPE || weap == WP_DYNAMITE || weap == WP_M7 || weap == WP_AIRSTRIKE || weap == WP_POISONGAS || weap == WP_DYNAMITE_ENG || weap == WP_GRENADE_LAUNCHER || weap == WP_GRENADE_PINEAPPLE || weap == WP_SMOKE_BOMB) 
+	if ( weap == WP_KNIFE || weap == WP_SNIPERRIFLE || weap == WP_FG42SCOPE || weap== WP_SNOOPERSCOPE || weap == WP_DYNAMITE  || weap == WP_AIRSTRIKE || weap == WP_POISONGAS  || weap == WP_GRENADE_LAUNCHER || weap == WP_GRENADE_PINEAPPLE) 
 	{
 		G_AddEvent(activator, EV_GENERAL_SOUND, G_SoundIndex("sound/items/use_nothing.wav"));
 		return qfalse;
@@ -380,14 +352,10 @@ qboolean Survival_HandleWeaponUpgrade(gentity_t *ent, gentity_t *activator, int 
 	ps->weaponUpgraded[weap]++;
 
 	// If main weapon is upgraded upgrade alt too
-	if (weap == WP_M1GARAND)
-		ps->weaponUpgraded[WP_M7] = ps->weaponUpgraded[weap];
 
 	if (weap == WP_MAUSER)
 		ps->weaponUpgraded[WP_SNIPERRIFLE] = ps->weaponUpgraded[weap];
 
-	if (weap == WP_DELISLE)
-		ps->weaponUpgraded[WP_DELISLESCOPE] = ps->weaponUpgraded[weap];
 
 	if (weap == WP_GARAND)
 		ps->weaponUpgraded[WP_SNOOPERSCOPE] = ps->weaponUpgraded[weap];
@@ -395,20 +363,12 @@ qboolean Survival_HandleWeaponUpgrade(gentity_t *ent, gentity_t *activator, int 
 	if (weap == WP_FG42)
 		ps->weaponUpgraded[WP_FG42SCOPE] = ps->weaponUpgraded[weap];
 
-	if (weap == WP_M1941)
-		ps->weaponUpgraded[WP_M1941SCOPE] = ps->weaponUpgraded[weap];
 
 	activator->client->ps.persistant[PERS_SCORE] -= upgradePrice;
 
 	// Refill ammo
 	Add_Ammo(activator, weap, BG_GetMaxAmmo(&activator->client->ps, weap, svParams.ltAmmoBonus), qtrue);
 	Add_Ammo(activator, weap, BG_GetMaxAmmo(&activator->client->ps, weap, svParams.ltAmmoBonus), qfalse);
-
-	if (weap == WP_M1GARAND)
-	{
-		Add_Ammo(activator, WP_M7, BG_GetMaxAmmo(&activator->client->ps, WP_M7, svParams.ltAmmoBonus), qtrue);
-		Add_Ammo(activator, WP_M7, BG_GetMaxAmmo(&activator->client->ps, WP_M7, svParams.ltAmmoBonus), qfalse);
-	}
 
 	trap_SendServerCommand(-1, "mu_play sound/misc/wpn_upgrade.wav 0\n");
 	return qtrue;
@@ -439,8 +399,7 @@ qboolean Survival_HandleWeaponOrGrenade(gentity_t *ent, gentity_t *activator, gi
 	// Special handling: grenades (no new weapon granted)
 	if (item->giType == IT_AMMO && (
 		weapon == WP_GRENADE_LAUNCHER ||
-		weapon == WP_GRENADE_PINEAPPLE ||
-		weapon == WP_M7
+		weapon == WP_GRENADE_PINEAPPLE
 	)) {
 		maxAmmo = BG_GetMaxAmmo(&activator->client->ps, weapon, svParams.ltAmmoBonus);
 
@@ -515,15 +474,6 @@ qboolean Survival_HandleWeaponOrGrenade(gentity_t *ent, gentity_t *activator, gi
 	maxAmmo = BG_GetMaxAmmo(&activator->client->ps, weapon, svParams.ltAmmoBonus);
 	Add_Ammo(activator, weapon, maxAmmo, qtrue);
 	Add_Ammo(activator, weapon, maxAmmo, qfalse);
-
-	// Bonus: give M7 launcher with Garand
-	if (weapon == WP_M1GARAND) {
-		Give_Weapon_New_Inventory(activator, WP_M7, qfalse);
-		{
-			int m7MaxAmmo = BG_GetMaxAmmo(&activator->client->ps, WP_M7, svParams.ltAmmoBonus);
-			Add_Ammo(activator, WP_M7, m7MaxAmmo, qfalse);
-		}
-	}
 
 	G_AddPredictableEvent(activator, EV_ITEM_PICKUP, item - bg_itemlist);
 	trap_SendServerCommand(-1, "mu_play sound/misc/buy.wav 0\n");
@@ -803,7 +753,7 @@ void Touch_objective_info(gentity_t *ent, gentity_t *other, trace_t *trace) {
 		if (!Q_stricmp(techName, "ammo")) {
 
 		// Do not show price if holding dynamite
-		if (other->client->ps.weapon == WP_DYNAMITE_ENG || other->client->ps.weapon == WP_POISONGAS || other->client->ps.weapon == WP_AIRSTRIKE ||  other->client->ps.weapon == WP_SMOKE_BOMB ) {
+		if (other->client->ps.weapon == WP_POISONGAS || other->client->ps.weapon == WP_AIRSTRIKE ) {
 			return;
 		}
 			price = (price > 0) ? price : Survival_GetDefaultWeaponPrice(other->client->ps.weapon) / 2;

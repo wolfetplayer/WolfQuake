@@ -192,8 +192,6 @@ void AICast_Die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	qboolean killerEnv	 = attacker && !(attacker->client) && !( attacker->aiCharacter );
 
     // ETSP Achievements stuff!
-	qboolean modGL = (meansOfDeath == MOD_M7 );
-	qboolean modBr = (meansOfDeath == MOD_BROWNING );
 	qboolean modAir = (meansOfDeath == MOD_AIRSTRIKE );
 	qboolean modGas = (meansOfDeath == MOD_POISONGAS );
 	
@@ -239,21 +237,6 @@ void AICast_Die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		}
 	}
 
-		if(self->aiCharacter && killerPlayer && modGL)
-	{
-		if ( !g_cheats.integer )
-		{
-		steamSetAchievement("ACH_GL");
-		}
-	}
-
-		if(self->aiCharacter == AICHAR_VENOM && killerPlayer && modBr)
-	{
-		if ( !g_cheats.integer ) 
-		{
-		steamSetAchievement("ACH_BROWNING");
-		}
-	}
 
 		if(self->aiCharacter && killerPlayer && modAir)
 	{
@@ -783,5 +766,5 @@ gentity_t* G_FindMissile( gentity_t* start, weapon_t weap ) {
 }
 
 gentity_t* G_FindSmokeBomb( gentity_t* start ) {
-	return G_FindMissile( start, WP_SMOKE_BOMB );
+	return G_FindMissile( start, WP_POISONGAS );
 }

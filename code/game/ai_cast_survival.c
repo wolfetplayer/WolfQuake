@@ -399,8 +399,6 @@ void AICast_Die_Survival( gentity_t *self, gentity_t *inflictor, gentity_t *atta
 	qboolean killerPlayer	 = attacker && attacker->client && !( attacker->aiCharacter );
 
     // ETSP Achievements stuff!
-	qboolean modGL = (meansOfDeath == MOD_M7 );
-	qboolean modBr = (meansOfDeath == MOD_BROWNING );
 	qboolean modAir = (meansOfDeath == MOD_AIRSTRIKE );
 	qboolean modGas = (meansOfDeath == MOD_POISONGAS );
 	
@@ -427,22 +425,6 @@ void AICast_Die_Survival( gentity_t *self, gentity_t *inflictor, gentity_t *atta
 		if ( !g_cheats.integer ) 
 		{
 		steamSetAchievement("ACH_PROTO_KNIFE");
-		}
-	}
-
-		if(self->aiCharacter && killerPlayer && modGL)
-	{
-		if ( !g_cheats.integer )
-		{
-		steamSetAchievement("ACH_GL");
-		}
-	}
-
-		if(self->aiCharacter == AICHAR_VENOM && killerPlayer && modBr)
-	{
-		if ( !g_cheats.integer ) 
-		{
-		steamSetAchievement("ACH_BROWNING");
 		}
 	}
 

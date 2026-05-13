@@ -1041,34 +1041,8 @@ void ClientThink_real( gentity_t *ent ) {
 		            }
 	                }
 		break;
-		case WP_M1941SCOPE:
-	             if ( client->sniperRifleFiredTime ) {
-		            if ( level.time - client->sniperRifleFiredTime >  ammoTable[WP_M1941SCOPE].weapRecoilDuration ) {
-			        client->sniperRifleFiredTime = 0;
-		            } else {
-			        VectorCopy( client->ps.viewangles,muzzlebounce );
-			         muzzlebounce[PITCH] -= 0.25*client->sniperRifleMuzzlePitch*cos( 2.5*( level.time - client->sniperRifleFiredTime ) / ammoTable[WP_M1941SCOPE].weapRecoilDuration );
-			         muzzlebounce[YAW] += 0.2*client->sniperRifleMuzzleYaw*cos( 1.0 - ( level.time - client->sniperRifleFiredTime )*3 / ammoTable[WP_M1941SCOPE].weapRecoilDuration );
-			         muzzlebounce[PITCH] -= 0.25*client->sniperRifleMuzzlePitch*random() * ( 1.0f - ( level.time - client->sniperRifleFiredTime ) / ammoTable[WP_M1941SCOPE].weapRecoilDuration );
-			         muzzlebounce[YAW] += 0.2 * crandom() * ( 1.0f - ( level.time - client->sniperRifleFiredTime ) / ammoTable[WP_M1941SCOPE].weapRecoilDuration );
-			         SetClientViewAngle( ent,muzzlebounce );
-		            }
-	                }
-		break;
-		case WP_DELISLESCOPE:
-	             if ( client->sniperRifleFiredTime ) {
-		            if ( level.time - client->sniperRifleFiredTime >  ammoTable[WP_DELISLESCOPE].weapRecoilDuration ) {
-			        client->sniperRifleFiredTime = 0;
-		            } else {
-			        VectorCopy( client->ps.viewangles,muzzlebounce );
-			         muzzlebounce[PITCH] -= 0.25*client->sniperRifleMuzzlePitch*cos( 2.5*( level.time - client->sniperRifleFiredTime ) / ammoTable[WP_DELISLESCOPE].weapRecoilDuration );
-			         muzzlebounce[YAW] += 0.2*client->sniperRifleMuzzleYaw*cos( 1.0 - ( level.time - client->sniperRifleFiredTime )*3 / ammoTable[WP_DELISLESCOPE].weapRecoilDuration );
-			         muzzlebounce[PITCH] -= 0.25*client->sniperRifleMuzzlePitch*random() * ( 1.0f - ( level.time - client->sniperRifleFiredTime ) / ammoTable[WP_DELISLESCOPE].weapRecoilDuration );
-			         muzzlebounce[YAW] += 0.2 * crandom() * ( 1.0f - ( level.time - client->sniperRifleFiredTime ) / ammoTable[WP_DELISLESCOPE].weapRecoilDuration );
-			         SetClientViewAngle( ent,muzzlebounce );
-		            }
-	                }
-		break;
+
+
 	}
 	//if ( client->ps.stats[STAT_PLAYER_CLASS] == PC_MEDIC ) {
 		//if ( level.time > client->ps.powerups[PW_REGEN] + 5000 ) {
@@ -1833,7 +1807,6 @@ void ClientEndFrame( gentity_t *ent ) {
 			break;
 		case WP_GRENADE_PINEAPPLE:
 		case WP_GRENADE_LAUNCHER:   // if they are wearing down a grenade fuse, we should be very afraid
-		case WP_SMOKE_BOMB:
 		case WP_POISONGAS:
 			if ( ent->client->ps.grenadeTimeLeft && ent->client->ps.grenadeTimeLeft < 3000 ) {
 				AICast_CheckDangerousEntity( ent, DANGER_CLIENTAIM, 1000, 0.5, 0.9, qtrue );

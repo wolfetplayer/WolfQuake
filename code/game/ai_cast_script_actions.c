@@ -1860,13 +1860,6 @@ qboolean AICast_ScriptAction_GiveWeapon( cast_state_t *cs, char *params ) {
 		}
 	}
 
-	if ( weapon == WP_TT33 ) {
-		// if you had the colt already, now you've got two!
-		if ( COM_BitCheck( g_entities[cs->entityNum].client->ps.weapons, WP_TT33 ) ) {
-			weapon = WP_DUAL_TT33;
-		}
-	}
-
 	if (!ent->aiCharacter)
 	{
 		if (g_newinventory.integer > 0 || g_gametype.integer == GT_SURVIVAL)
@@ -1892,7 +1885,7 @@ qboolean AICast_ScriptAction_GiveWeapon( cast_state_t *cs, char *params ) {
 		{
 			if (g_newinventory.integer > 0 || g_gametype.integer == GT_SURVIVAL)
 			{
-				if (weapon != WP_AIRSTRIKE && weapon != WP_GRENADE_LAUNCHER && weapon != WP_GRENADE_PINEAPPLE && weapon != WP_ARTY && weapon != WP_POISONGAS && weapon != WP_DYNAMITE_ENG && weapon != WP_DYNAMITE && weapon != WP_SMOKE_BOMB && weapon != WP_M7) // Skip WP_AIRSTRIKE and WP_ARTY	
+				if (weapon != WP_AIRSTRIKE && weapon != WP_GRENADE_LAUNCHER && weapon != WP_GRENADE_PINEAPPLE && weapon != WP_ARTY && weapon != WP_POISONGAS && weapon != WP_DYNAMITE) // Skip WP_AIRSTRIKE and WP_ARTY	
 				{
 					if (ent->client->ps.stats[STAT_PLAYER_CLASS] == PC_SOLDIER)
 					{
@@ -1921,18 +1914,6 @@ qboolean AICast_ScriptAction_GiveWeapon( cast_state_t *cs, char *params ) {
         }
 		if ( weapon == WP_SNIPERRIFLE ) {
 			COM_BitSet( g_entities[cs->entityNum].client->ps.weapons, WP_MAUSER );
-		}
-		if ( weapon == WP_M7 ) {
-			COM_BitSet( g_entities[cs->entityNum].client->ps.weapons, WP_M1GARAND );
-		}
-		if ( weapon == WP_M1GARAND ) {
-			COM_BitSet( g_entities[cs->entityNum].client->ps.weapons, WP_M7 );
-		}
-		if ( weapon == WP_DELISLESCOPE ) {
-			COM_BitSet( g_entities[cs->entityNum].client->ps.weapons, WP_DELISLE );
-		}
-		if ( weapon == WP_M1941SCOPE ) {
-			COM_BitSet( g_entities[cs->entityNum].client->ps.weapons, WP_M1941 );
 		}
 //----(SA)	end
 
@@ -2197,12 +2178,6 @@ if ( !Q_strcasecmp (params, "soviet_random") )
 		}
 	}
 
-	if ( weapon == WP_TT33 ) {
-		if ( COM_BitCheck( g_entities[cs->entityNum].client->ps.weapons, WP_TT33 ) ) {
-			weapon = WP_DUAL_TT33;
-		}
-	}
-
 	if ( weapon != WP_NONE ) {
 		COM_BitSet( g_entities[cs->entityNum].client->ps.weapons, weapon );
 
@@ -2221,18 +2196,6 @@ if ( !Q_strcasecmp (params, "soviet_random") )
         }
 		if ( weapon == WP_SNIPERRIFLE ) {
 			COM_BitSet( g_entities[cs->entityNum].client->ps.weapons, WP_MAUSER );
-		}
-		if ( weapon == WP_M7 ) {
-			COM_BitSet( g_entities[cs->entityNum].client->ps.weapons, WP_M1GARAND );
-		}
-		if ( weapon == WP_M1GARAND ) {
-			COM_BitSet( g_entities[cs->entityNum].client->ps.weapons, WP_M7 );
-		}
-		if ( weapon == WP_DELISLESCOPE ) {
-			COM_BitSet( g_entities[cs->entityNum].client->ps.weapons, WP_DELISLE );
-		}
-		if ( weapon == WP_M1941SCOPE ) {
-			COM_BitSet( g_entities[cs->entityNum].client->ps.weapons, WP_M1941 );
 		}
 //----(SA)	end
 
@@ -2318,16 +2281,6 @@ qboolean AICast_ScriptAction_TakeWeapon( cast_state_t *cs, char *params ) {
 				// take 'akimbo' first if it's there, then take 'colt'
 				if ( COM_BitCheck( g_entities[cs->entityNum].client->ps.weapons, WP_AKIMBO ) ) {
 					weapon = WP_AKIMBO;
-				}
-			}
-
-			if ( weapon == WP_DUAL_TT33 ) {
-				// take both the colt /and/ the akimbo weapons when 'akimbo' is specified
-				COM_BitClear( g_entities[cs->entityNum].client->ps.weapons, WP_TT33 );
-			} else if ( weapon == WP_TT33 ) {
-				// take 'akimbo' first if it's there, then take 'colt'
-				if ( COM_BitCheck( g_entities[cs->entityNum].client->ps.weapons, WP_DUAL_TT33 ) ) {
-					weapon = WP_DUAL_TT33;
 				}
 			}
 

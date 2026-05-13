@@ -163,24 +163,7 @@ static int weapIconDrawSize( int weap ) {
 	case WP_SNOOPERSCOPE:
 	case WP_SNIPERRIFLE:
 	// RealRTCW weapons
-	case WP_MP34:
-	case WP_PPSH:
-	case WP_MOSIN:
-	case WP_DELISLE:
-	case WP_DELISLESCOPE:
-	case WP_M1941SCOPE:
-	case WP_G43:
-	case WP_M1GARAND:
-	case WP_BAR:
-	case WP_M30:
-    case WP_MP44:
-	case WP_MG42M:
 	case WP_M97:
-	case WP_AUTO5:
-	case WP_BROWNING:
-	case WP_M7:
-	case WP_M1941:
-	case WP_HDM:
 		return 2;
 	case WP_KNIFE:
 	     return 1;
@@ -233,7 +216,7 @@ static void CG_DrawPlayerWeaponIcon( rectDef_t *rect, qboolean drawHighlighted, 
 			scale = (float)(cg.predictedPlayerState.grenadeTimeLeft/(KNIFECHARGETIME/7.f));
 			halfScale = scale * 0.5f;
 		}
-		else if ( realweap == WP_DYNAMITE || realweap == WP_DYNAMITE_ENG ) {
+		else if ( realweap == WP_DYNAMITE ) {
 			if ( ( ( cg.grenLastTime ) % 1000 ) > ( ( cg.predictedPlayerState.grenadeTimeLeft ) % 1000 ) ) {
 				trap_S_StartLocalSound( cgs.media.grenadePulseSound4, CHAN_LOCAL_SOUND );
 			}
@@ -530,8 +513,6 @@ static void CG_DrawPlayerAmmoValue( rectDef_t *rect, int font, float scale, vec4
 	switch ( weap ) {      // some weapons don't draw ammo count text
 	case WP_AIRSTRIKE:
 	case WP_POISONGAS:
-	case WP_DYNAMITE_ENG:
-	case WP_SMOKE_BOMB:
 		return;
 
 	case WP_GRENADE_LAUNCHER:
@@ -1523,18 +1504,6 @@ qboolean CG_OwnerDrawVisible( int flags ) {
 		}
 	}
 
-	if ( flags & CG_SHOW_NOT_V_SNIPER ) {     // if looking through sniper scope
-		if ( cg.weaponSelect == WP_DELISLESCOPE ) {
-			return qfalse;
-		}
-	}
-
-	if ( flags & CG_SHOW_NOT_V_SNIPER ) {     // if looking through sniper scope
-		if ( cg.weaponSelect == WP_M1941SCOPE ) {
-			return qfalse;
-		}
-	}
-
 	if ( flags & CG_SHOW_NOT_V_SNOOPER ) {        // if looking through snooper scope
 		if ( cg.weaponSelect == WP_SNOOPERSCOPE ) {
 			return qfalse;
@@ -1589,7 +1558,7 @@ qboolean CG_OwnerDrawVisible( int flags ) {
 //----(SA)	added
 	if ( flags & CG_SHOW_NOT_V_CLEAR ) {
 		// if /not/ looking through binocs,snooper or sniper
-		if ( !cg.zoomedBinoc && !( cg.weaponSelect == WP_SNIPERRIFLE ) && !( cg.weaponSelect == WP_SNOOPERSCOPE ) && !( cg.weaponSelect == WP_FG42SCOPE ) && !( cg.weaponSelect == WP_DELISLESCOPE ) && !( cg.weaponSelect == WP_M1941SCOPE ) ) {
+		if ( !cg.zoomedBinoc && !( cg.weaponSelect == WP_SNIPERRIFLE ) && !( cg.weaponSelect == WP_SNOOPERSCOPE ) && !( cg.weaponSelect == WP_FG42SCOPE ) ) {
 			return qfalse;
 		}
 	}
@@ -2013,7 +1982,7 @@ void CG_DrawWeapStability( rectDef_t *rect, vec4_t color, int align ) {
 		return;
 	}
 
-	if ( cg_drawSpreadScale.integer == 1 && !( cg.weaponSelect == WP_SNOOPERSCOPE || cg.weaponSelect == WP_SNIPERRIFLE || cg.weaponSelect == WP_FG42SCOPE || cg.weaponSelect == WP_DELISLESCOPE || cg.weaponSelect == WP_M1941SCOPE ) ) {
+	if ( cg_drawSpreadScale.integer == 1 && !( cg.weaponSelect == WP_SNOOPERSCOPE || cg.weaponSelect == WP_SNIPERRIFLE || cg.weaponSelect == WP_FG42SCOPE) ) {
 		// cg_drawSpreadScale of '1' means only draw for scoped weapons, '2' means draw all the time (for debugging)
 		return;
 	}

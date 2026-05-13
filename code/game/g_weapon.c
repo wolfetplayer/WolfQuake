@@ -766,7 +766,7 @@ void Bullet_Endpos( gentity_t *ent, float spread, vec3_t *end ) {
 		r += crandom() * accuracy;
 		u += crandom() * ( accuracy * 1.25 );
 	} else {
-		if ( ent->s.weapon == WP_SNOOPERSCOPE || ent->s.weapon == WP_SNIPERRIFLE || ent->s.weapon == WP_FG42SCOPE || ent->s.weapon == WP_DELISLESCOPE  ) {
+		if ( ent->s.weapon == WP_SNOOPERSCOPE || ent->s.weapon == WP_SNIPERRIFLE || ent->s.weapon == WP_FG42SCOPE ) {
 			dist *= 2;
 			randSpread = qfalse;
 		}
@@ -862,12 +862,8 @@ qboolean Bullet_Fire_Extended( gentity_t *source, gentity_t *attacker, vec3_t st
 
 	switch (attacker->s.weapon)
 	{
-	case WP_REVOLVER:
-	case WP_MOSIN:
 	case WP_MAUSER:
 	case WP_SNIPERRIFLE:
-	case WP_DELISLE:
-	case WP_DELISLESCOPE:
 		if (attacker->client->ps.weaponUpgraded[attacker->s.weapon])
 		{
 			explosiveRounds = qtrue;
@@ -1135,10 +1131,8 @@ gentity_t *weapon_grenadelauncher_fire( gentity_t *ent, int grenType ) {
 		case WP_GRENADE_LAUNCHER:
 		case WP_GRENADE_PINEAPPLE:
 		case WP_POISONGAS:
-		case WP_SMOKE_BOMB:
 		case WP_DYNAMITE:
 		case WP_AIRSTRIKE:
-		case WP_DYNAMITE_ENG:
 			upangle *= ammoTable[grenType].upAngle;
 			break;
 		default:
@@ -1183,11 +1177,6 @@ gentity_t *weapon_grenadelauncher_fire( gentity_t *ent, int grenType ) {
 	}
 
 	// Arnout: override for smoke gren
-
-	if ( grenType ==  WP_SMOKE_BOMB ) {
-		m->s.effect1Time = 30;
-		m->think = weapon_smokeBombExplode;
-	}
 
 	if ( grenType == WP_AIRSTRIKE ) {
 
@@ -1732,15 +1721,12 @@ void CalcMuzzlePoint( gentity_t *ent, int weapon, vec3_t forward, vec3_t right, 
 //			VectorMA( muzzlePoint, 14, right, muzzlePoint );	//----(SA)	new first person rl position
 //			break;
 	case WP_DYNAMITE:
-	case WP_DYNAMITE_ENG:
 	case WP_GRENADE_PINEAPPLE:
 	case WP_GRENADE_LAUNCHER:
 	case WP_POISONGAS:
-	case WP_SMOKE_BOMB:
 		VectorMA( muzzlePoint, 20, right, muzzlePoint );
 		break;
 	case WP_AKIMBO:     // left side rather than right
-	case WP_DUAL_TT33:
 		VectorMA( muzzlePoint, -6, right, muzzlePoint );
 		VectorMA( muzzlePoint, -4, up, muzzlePoint );
 		break;
@@ -1787,7 +1773,7 @@ void CalcMuzzlePoints( gentity_t *ent, int weapon ) {
 	if ( !( ent->r.svFlags & SVF_CASTAI ) ) {   // non ai's take into account scoped weapon 'sway' (just another way aimspread is visualized/utilized)
 		float spreadfrac, phase;
 
-		if ( weapon == WP_SNIPERRIFLE || weapon == WP_SNOOPERSCOPE || weapon == WP_FG42SCOPE || weapon == WP_DELISLESCOPE || weapon == WP_M1941SCOPE ) {
+		if ( weapon == WP_SNIPERRIFLE || weapon == WP_SNOOPERSCOPE || weapon == WP_FG42SCOPE ) {
 			spreadfrac = ent->client->currentAimSpreadScale;
 
 			// rotate 'forward' vector by the sway
@@ -1851,7 +1837,6 @@ void FireWeapon( gentity_t *ent ) {
 			case WP_SILENCER:
 			case WP_COLT:
 			case WP_AKIMBO:
-			case WP_DUAL_TT33:
 				aimSpreadScale += 0.4f;
 				break;
 
@@ -1892,25 +1877,12 @@ void FireWeapon( gentity_t *ent ) {
 	case WP_SILENCER:
 	case WP_COLT:
 	case WP_AKIMBO: //----(SA)	added
-	case WP_TT33:
-	case WP_DUAL_TT33:
-	case WP_REVOLVER:
-	case WP_HDM:
 	case WP_MP40:
 	case WP_THOMPSON:
 	case WP_STEN:
-	case WP_PPSH:
-	case WP_MP34:
 	case WP_MAUSER:
 	case WP_GARAND:
-	case WP_MOSIN:
-	case WP_DELISLE:
-	case WP_M1GARAND:
-	case WP_G43:
-	case WP_M1941:
-	case WP_MP44:
 	case WP_FG42:
-	case WP_BAR:
 		Bullet_Fire_Normal( ent, aimSpreadScale );
 		break;
 	
@@ -1932,9 +1904,6 @@ void FireWeapon( gentity_t *ent ) {
 			}
 		}
 		break;
-	case WP_M7:
-		weapon_gpg40_fire( ent, ent->s.weapon );
-		break;
 	case WP_AIRSTRIKE:
 		if ( level.time - ent->client->ps.classWeaponTime >= g_LTChargeTime.integer ) {
 			if ( level.time - ent->client->ps.classWeaponTime > g_LTChargeTime.integer ) {
@@ -1944,15 +1913,6 @@ void FireWeapon( gentity_t *ent ) {
 			weapon_grenadelauncher_fire( ent,WP_AIRSTRIKE );
 		}
 		break;
-	case WP_SMOKE_BOMB:
-		if ( level.time - ent->client->ps.classWeaponTime >= g_cvopsChargeTime.integer ) {
-			if ( level.time - ent->client->ps.classWeaponTime > g_cvopsChargeTime.integer ) {
-				ent->client->ps.classWeaponTime = level.time - g_cvopsChargeTime.integer;
-			}
-			ent->client->ps.classWeaponTime = level.time; //+= g_LTChargeTime.integer*0.5f; FIXME later
-			weapon_grenadelauncher_fire( ent,WP_SMOKE_BOMB );
-		}
-		break;
 	case WP_POISONGAS:
 		if ( level.time - ent->client->ps.classWeaponTime >= g_medicChargeTime.integer ) {
 			if ( level.time - ent->client->ps.classWeaponTime > g_medicChargeTime.integer ) {
@@ -1960,15 +1920,6 @@ void FireWeapon( gentity_t *ent ) {
 			}
 			ent->client->ps.classWeaponTime = level.time; //+= g_LTChargeTime.integer*0.5f; FIXME later
 			weapon_grenadelauncher_fire( ent,WP_POISONGAS );
-		}
-		break;
-	case WP_DYNAMITE_ENG:
-		if ( level.time - ent->client->ps.classWeaponTime >= g_engineerChargeTime.integer ) {
-			if ( level.time - ent->client->ps.classWeaponTime > g_engineerChargeTime.integer ) {
-				ent->client->ps.classWeaponTime = level.time - g_engineerChargeTime.integer;
-			}
-			ent->client->ps.classWeaponTime = level.time; //+= g_LTChargeTime.integer*0.5f; FIXME later
-			weapon_grenadelauncher_fire( ent,WP_DYNAMITE_ENG );
 		}
 		break;
 	case WP_ARTY:
@@ -1995,17 +1946,6 @@ void FireWeapon( gentity_t *ent ) {
 			SetClientViewAngle( ent,viewang );
 		}
 		break;
-	case WP_DELISLESCOPE:
-		Bullet_Fire_Normal( ent, aimSpreadScale );
-		if (!ent->aiCharacter)
-		{
-			VectorCopy(ent->client->ps.viewangles, viewang);
-			ent->client->sniperRifleMuzzleYaw = crandom() * ammoTable[WP_DELISLESCOPE].weapRecoilYaw[0]; // used in clientthink
-			ent->client->sniperRifleMuzzlePitch = ammoTable[WP_DELISLESCOPE].weapRecoilPitch[0];
-			ent->client->sniperRifleFiredTime = level.time;
-			SetClientViewAngle(ent, viewang);
-		}
-		break;
 	case WP_FG42SCOPE:
 		Bullet_Fire_Normal( ent, aimSpreadScale );
 		if (!ent->aiCharacter)
@@ -2017,71 +1957,7 @@ void FireWeapon( gentity_t *ent ) {
 			SetClientViewAngle(ent, viewang);
 		}
 		break;
-	case WP_M1941SCOPE:
-		Bullet_Fire_Normal( ent, aimSpreadScale );
-		if ( !ent->aiCharacter ) {
-			VectorCopy( ent->client->ps.viewangles,viewang );
-			ent->client->sniperRifleMuzzleYaw = crandom() * ammoTable[WP_M1941SCOPE].weapRecoilYaw[0]; // used in clientthink
-			ent->client->sniperRifleMuzzlePitch = ammoTable[WP_M1941SCOPE].weapRecoilPitch[0];
-			ent->client->sniperRifleFiredTime = level.time;
-			SetClientViewAngle( ent,viewang );
-		}
-		break;
-	case WP_MG42M:
-		Bullet_Fire_Normal( ent, aimSpreadScale );
-		if (!ent->aiCharacter) {
-		vec3_t vec_forward, vec_vangle;
-		VectorCopy(ent->client->ps.viewangles, vec_vangle);
-		vec_vangle[PITCH] = 0;	
-		AngleVectors(vec_vangle, vec_forward, NULL, NULL);
-		if (ent->s.groundEntityNum == ENTITYNUM_NONE)
-			VectorMA(ent->client->ps.velocity, -8, vec_forward, ent->client->ps.velocity);
-		else
-			VectorMA(ent->client->ps.velocity, -24, vec_forward, ent->client->ps.velocity);
-		}
-		break; 
-	case WP_BROWNING:
-		Bullet_Fire_Normal( ent, aimSpreadScale );
-		if (!ent->aiCharacter) {
-		vec3_t vec_forward, vec_vangle;
-		VectorCopy(ent->client->ps.viewangles, vec_vangle);
-		vec_vangle[PITCH] = 0;	
-		AngleVectors(vec_vangle, vec_forward, NULL, NULL);
-		if (ent->s.groundEntityNum == ENTITYNUM_NONE)
-			VectorMA(ent->client->ps.velocity, -8, vec_forward, ent->client->ps.velocity);
-		else
-			VectorMA(ent->client->ps.velocity, -24, vec_forward, ent->client->ps.velocity);
-		}
-		break;
 	case WP_M97:
-		Bullet_Fire_Normal( ent, aimSpreadScale );
-		if (!ent->aiCharacter) {
-			vec3_t vec_forward, vec_vangle;
-			VectorCopy(ent->client->ps.viewangles, vec_vangle);
-			vec_vangle[PITCH] = 0;	// nullify pitch so you can't lightning jump
-			AngleVectors(vec_vangle, vec_forward, NULL, NULL);
-			 // make it less if in the air
-			if (ent->s.groundEntityNum == ENTITYNUM_NONE)
-				VectorMA(ent->client->ps.velocity, -8, vec_forward, ent->client->ps.velocity);
-			else
-				VectorMA(ent->client->ps.velocity, -24, vec_forward, ent->client->ps.velocity);
-		}
-		break;
-	case WP_AUTO5:
-		Bullet_Fire_Normal( ent, aimSpreadScale );
-		if (!ent->aiCharacter) {
-			vec3_t vec_forward, vec_vangle;
-			VectorCopy(ent->client->ps.viewangles, vec_vangle);
-			vec_vangle[PITCH] = 0;	// nullify pitch so you can't lightning jump
-			AngleVectors(vec_vangle, vec_forward, NULL, NULL);
-			 // make it less if in the air
-			if (ent->s.groundEntityNum == ENTITYNUM_NONE)
-				VectorMA(ent->client->ps.velocity, -8, vec_forward, ent->client->ps.velocity);
-			else
-				VectorMA(ent->client->ps.velocity, -24, vec_forward, ent->client->ps.velocity);
-		}
-		break;
-	case WP_M30:
 		Bullet_Fire_Normal( ent, aimSpreadScale );
 		if (!ent->aiCharacter) {
 			vec3_t vec_forward, vec_vangle;
