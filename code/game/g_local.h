@@ -928,6 +928,7 @@ int G_PredictMissile( gentity_t *ent, int duration, vec3_t endPos, qboolean allo
 void G_RunSpit( gentity_t *ent );
 void G_RunDebris( gentity_t *ent );
 
+gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t aimdir, int grenadeWPID );
 gentity_t *fire_rocket( gentity_t *self, vec3_t start, vec3_t dir );
 

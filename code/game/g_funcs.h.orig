@@ -494,6 +494,7 @@ If you have questions concerning this license or the applicable additional terms
 {"fire_zombiespit", (byte *)fire_zombiespit},
 {"fire_rocket", (byte *)fire_rocket},
 {"fire_grenade", (byte *)fire_grenade},
+{"fire_plasma", (byte *)fire_plasma},
 {"G_RunSpit", (byte *)G_RunSpit},
 {"G_PredictMissile", (byte *)G_PredictMissile},
 {"G_PredictBounceMissile", (byte *)G_PredictBounceMissile},

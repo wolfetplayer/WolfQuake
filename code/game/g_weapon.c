@@ -42,6 +42,7 @@ static float s_quadFactor;
 static vec3_t forward, right, up;
 static vec3_t muzzleEffect;
 vec3_t muzzleTrace;
+static	vec3_t	muzzle;
 
 
 // forward dec
@@ -1409,48 +1410,23 @@ void weapon_venom_fire(gentity_t *ent, qboolean fullmode, float aimSpreadScale) 
 }
 
 
-
-
-
-/*
-======================================================================
-
-ROCKET
-
-======================================================================
-*/
-
 void Weapon_RocketLauncher_Fire( gentity_t *ent, float aimSpreadScale ) {
-//	trace_t		tr;
 	float r, u;
-	vec3_t dir, launchpos;     //, viewpos, wallDir;
+	vec3_t dir, launchpos; 
 	gentity_t   *m;
 
-	// get a little bit of randomness and apply it back to the direction
-	/*if ( !ent->aiCharacter ) {
-		r = crandom() * aimSpreadScale;
-		u = crandom() * aimSpreadScale;
-
-		VectorScale( forward, 16, dir );
-		VectorMA( dir, r, right, dir );
-		VectorMA( dir, u, up, dir );
-		VectorNormalize( dir );
-
-		VectorCopy( muzzleEffect, launchpos );
-
-		m = fire_rocket( ent, launchpos, dir );
-
-		// add kick-back
-		VectorMA( ent->client->ps.velocity, -80, forward, ent->client->ps.velocity ); // RealRTCW was -64
-
-	} else {*/
-		m = fire_rocket( ent, muzzleEffect, forward );
-	//}
-
+	m = fire_rocket( ent, muzzleEffect, forward );
 	m->damage *= s_quadFactor;
 	m->splashDamage *= s_quadFactor;
 
-//	VectorAdd( m->s.pos.trDelta, ent->client->ps.velocity, m->s.pos.trDelta );	// "real" physics
+}
+
+void Weapon_Plasmagun_Fire (gentity_t *ent) {
+	gentity_t	*m;
+
+	m = fire_plasma (ent, muzzleEffect, forward);
+	m->damage *= s_quadFactor;
+	m->splashDamage *= s_quadFactor;
 }
 
 void Use_Item( gentity_t *ent, gentity_t *other, gentity_t *activator );
@@ -2004,6 +1980,9 @@ void FireWeapon( gentity_t *ent ) {
 				Weapon_RocketLauncher_Fire(ent, aimSpreadScale);
 			}
 		}
+		break;
+	case WP_Q3_PLASMAGUN:
+		Weapon_Plasmagun_Fire( ent );
 		break;
 	case WP_GRENADE_LAUNCHER:
 	case WP_GRENADE_PINEAPPLE:

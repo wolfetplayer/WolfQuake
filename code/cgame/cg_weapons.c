@@ -654,7 +654,7 @@ static void CG_PanzerFaustEjectBrass( centity_t *cent ) {
 	float waterScale = 1.0f;
 	vec3_t v[3];
 
-	if ( cent->currentState.weapon == WP_Q3_ROCKET_LAUNCHER)
+	if ( cent->currentState.weapon == WP_Q3_ROCKET_LAUNCHER || cent->currentState.weapon == WP_Q3_PLASMAGUN )
 		return;
 
 	le = CG_AllocLocalEntity();
@@ -1137,7 +1137,93 @@ void CG_RailTrail( clientInfo_t *ci, vec3_t start, vec3_t end, int type ) {  //-
 
 }
 
+/*
+==========================
+CG_PlasmaTrail
+==========================
+*/
+static void CG_PlasmaTrail( centity_t *cent, const weaponInfo_t *wi ) {
+	localEntity_t	*le;
+	refEntity_t		*re;
+	entityState_t	*es;
+	vec3_t			velocity, xvelocity, origin;
+	vec3_t			offset, xoffset;
+	vec3_t			v[3];
 
+	float	waterScale = 1.0f;
+
+
+	es = &cent->currentState;
+
+	BG_EvaluateTrajectory( &es->pos, cg.time, origin );
+
+	le = CG_AllocLocalEntity();
+	re = &le->refEntity;
+
+	velocity[0] = 60 - 120 * crandom();
+	velocity[1] = 40 - 80 * crandom();
+	velocity[2] = 100 - 200 * crandom();
+
+	le->leType = LE_MOVE_SCALE_FADE;
+	le->leFlags = LEF_TUMBLE;
+	le->leBounceSoundType = LEBS_NONE;
+	le->leMarkType = LEMT_NONE;
+
+	le->startTime = cg.time;
+	le->endTime = le->startTime + 600;
+
+	le->pos.trType = TR_GRAVITY;
+	le->pos.trTime = cg.time;
+
+	AnglesToAxis( cent->lerpAngles, v );
+
+	offset[0] = 2;
+	offset[1] = 2;
+	offset[2] = 2;
+
+	xoffset[0] = offset[0] * v[0][0] + offset[1] * v[1][0] + offset[2] * v[2][0];
+	xoffset[1] = offset[0] * v[0][1] + offset[1] * v[1][1] + offset[2] * v[2][1];
+	xoffset[2] = offset[0] * v[0][2] + offset[1] * v[1][2] + offset[2] * v[2][2];
+
+	VectorAdd( origin, xoffset, re->origin );
+	VectorCopy( re->origin, le->pos.trBase );
+
+	if ( CG_PointContents( re->origin, -1 ) & CONTENTS_WATER ) {
+		waterScale = 0.10f;
+	}
+
+	xvelocity[0] = velocity[0] * v[0][0] + velocity[1] * v[1][0] + velocity[2] * v[2][0];
+	xvelocity[1] = velocity[0] * v[0][1] + velocity[1] * v[1][1] + velocity[2] * v[2][1];
+	xvelocity[2] = velocity[0] * v[0][2] + velocity[1] * v[1][2] + velocity[2] * v[2][2];
+	VectorScale( xvelocity, waterScale, le->pos.trDelta );
+
+	AxisCopy( axisDefault, re->axis );
+	re->shaderTime = cg.time / 1000.0f;
+	re->reType = RT_SPRITE;
+	re->radius = 0.25f;
+	re->customShader = cgs.media.railRingsShader;
+	le->bounceFactor = 0.3f;
+
+	re->shaderRGBA[0] = wi->flashDlightColor[0] * 63;
+	re->shaderRGBA[1] = wi->flashDlightColor[1] * 63;
+	re->shaderRGBA[2] = wi->flashDlightColor[2] * 63;
+	re->shaderRGBA[3] = 63;
+
+	le->color[0] = wi->flashDlightColor[0] * 0.2;
+	le->color[1] = wi->flashDlightColor[1] * 0.2;
+	le->color[2] = wi->flashDlightColor[2] * 0.2;
+	le->color[3] = 0.25f;
+
+	le->angles.trType = TR_LINEAR;
+	le->angles.trTime = cg.time;
+	le->angles.trBase[0] = rand()&31;
+	le->angles.trBase[1] = rand()&31;
+	le->angles.trBase[2] = rand()&31;
+	le->angles.trDelta[0] = 1;
+	le->angles.trDelta[1] = 0.5;
+	le->angles.trDelta[2] = 0;
+
+}
 
 
 /*
@@ -1716,7 +1802,9 @@ static qboolean CG_RW_ParseClient( int handle, weaponInfo_t *weaponInfo, int wea
 					weaponInfo->missileTrailFunc = CG_RocketTrail;
 				} else if ( !Q_stricmp( filename, "PyroSmokeTrail" ) ) {
 					weaponInfo->missileTrailFunc = CG_PyroSmokeTrail;
-				} 
+				}  else if ( !Q_stricmp( filename, "PlasmaTrail" ) ) {
+					weaponInfo->missileTrailFunc = CG_PlasmaTrail;
+				}
 			}
 		} else if ( !Q_stricmp( token.string, "missileDlight" ) ) {
 			if ( !PC_Float_Parse( handle, &weaponInfo->missileDlight ) ) {
@@ -3871,6 +3959,7 @@ void CG_DrawWeaponSelect( void ) {
 		case WP_TESLA:
 		case WP_PANZERFAUST:
 		case WP_Q3_ROCKET_LAUNCHER:
+		case WP_Q3_PLASMAGUN:
 		case WP_FLAMETHROWER:
 		case WP_FG42:
 		case WP_FG42SCOPE:
@@ -6185,6 +6274,13 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 		lightColor[0] = 1;
 		lightColor[1] = 0.75;
 		lightColor[2] = 0.0;
+		break;
+	case WP_Q3_PLASMAGUN:
+		mod = cgs.media.ringFlashModel;
+		shader = cgs.media.plasmaExplosionShader;
+		sfx = cgs.media.sfx_plasmaexp;
+		mark = cgs.media.energyMarkShader;
+		radius = 16;
 		break;
 	case VERYBIGEXPLOSION:
 	case WP_PANZERFAUST:

@@ -70,6 +70,7 @@ void CG_CheckAmmo( void ) {
 		{
 		case WP_PANZERFAUST:
 		case WP_Q3_ROCKET_LAUNCHER:
+		case WP_Q3_PLASMAGUN:
 		case WP_GRENADE_LAUNCHER:
 		case WP_GRENADE_PINEAPPLE:
 		case WP_LUGER:

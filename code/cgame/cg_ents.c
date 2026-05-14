@@ -1257,7 +1257,14 @@ static void CG_Missile( centity_t *cent ) {
 	VectorCopy( cent->lerpOrigin, ent.origin );
 	VectorCopy( cent->lerpOrigin, ent.oldorigin );
 
-//----(SA) removed plasma gun code as sp5 is taking that spot
+	if ( cent->currentState.weapon == WP_Q3_PLASMAGUN ) {
+		ent.reType = RT_SPRITE;
+		ent.radius = 16;
+		ent.rotation = 0;
+		ent.customShader = cgs.media.plasmaBallShader;
+		trap_R_AddRefEntityToScene( &ent );
+		return;
+	}
 
 	// flicker between two skins
 	ent.skinNum = cg.clientFrame & 1;

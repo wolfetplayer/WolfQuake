@@ -1223,6 +1223,8 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.fkickflesh = trap_S_RegisterSound( "sound/weapons/melee/fstatck.wav" );
 	cgs.media.fkickmiss = trap_S_RegisterSound( "sound/weapons/melee/fstmiss.wav" );
 
+	cgs.media.sfx_plasmaexp = trap_S_RegisterSound ("sound/weapons/plasma/plasmx1a.wav");
+
 	cgs.media.noAmmoSound = trap_S_RegisterSound( "sound/weapons/noammo.wav" );
 
 	cgs.media.talkSound = trap_S_RegisterSound( "sound/player/talk.wav" );
@@ -1515,6 +1517,9 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.smokePuffRageProShader = trap_R_RegisterShader( "smokePuffRagePro" );
 	cgs.media.shotgunSmokePuffShader = trap_R_RegisterShader( "shotgunSmokePuff" );
 
+	cgs.media.plasmaBallShader = trap_R_RegisterShader( "sprites/plasma1" );
+	cgs.media.railRingsShader = trap_R_RegisterShader( "railDisc" );
+
 	cgs.media.bloodTrailShader = trap_R_RegisterShader( "bloodTrail" );
 	cgs.media.lagometerShader = trap_R_RegisterShader( "lagometer" );
 	cgs.media.connectionShader = trap_R_RegisterShader( "disconnected" );
@@ -1528,6 +1533,8 @@ static void CG_RegisterGraphics( void ) {
 //	cgs.media.binocShaderSimple = trap_R_RegisterShader( "gfx/misc/binocsimple" );			// TODO: remove
 	cgs.media.binocShaderSimpleQ = trap_R_RegisterShader( "gfx/misc/binocsimple_quarter" );  //----(SA)	added
 
+
+	cgs.media.plasmaExplosionShader = trap_R_RegisterShader( "plasmaExplosion" );
 	// Rafael
 	// cgs.media.snowShader = trap_R_RegisterShader ( "snowPuff" );
 	cgs.media.snowShader = trap_R_RegisterShader( "snow_tri" );

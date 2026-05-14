@@ -1213,6 +1213,7 @@ typedef struct {
 	qhandle_t smokePuffShader;
 	qhandle_t smokePuffRageProShader;
 	qhandle_t shotgunSmokePuffShader;
+	qhandle_t plasmaBallShader;
 	qhandle_t waterBubbleShader;
 	qhandle_t bloodTrailShader;
 
@@ -1314,6 +1315,8 @@ typedef struct {
 	qhandle_t ringFlashModel;
 	qhandle_t dishFlashModel;
 	qhandle_t lightningExplosionModel;
+
+	qhandle_t	plasmaExplosionShader;
 
 	qhandle_t zombieLoogie;
 	qhandle_t flamebarrel;
@@ -1606,6 +1609,8 @@ typedef struct {
 	sfxHandle_t xshieldLoopSound;
 
 	qhandle_t perkProIcons[MAX_PERKS];
+
+	sfxHandle_t	sfx_plasmaexp;
 
 } cgMedia_t;
 

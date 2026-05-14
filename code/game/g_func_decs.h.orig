@@ -493,6 +493,7 @@ extern gentity_t * fire_flamebarrel ( gentity_t * self , vec3_t start , vec3_t d
 extern gentity_t * fire_zombiespirit ( gentity_t * self , gentity_t * bolt , vec3_t start , vec3_t dir ) ;
 extern gentity_t * fire_zombiespit ( gentity_t * self , vec3_t start , vec3_t dir ) ;
 extern gentity_t * fire_rocket ( gentity_t * self , vec3_t start , vec3_t dir ) ;
+extern gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t aimdir);
 extern gentity_t * fire_grenade ( gentity_t * self , vec3_t start , vec3_t dir , int grenadeWPID ) ;
 extern void G_RunSpit ( gentity_t * ent ) ;
 extern int G_PredictMissile ( gentity_t * ent , int duration , vec3_t endPos , qboolean allowBounce ) ;
