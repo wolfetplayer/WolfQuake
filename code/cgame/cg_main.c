@@ -1518,6 +1518,7 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.shotgunSmokePuffShader = trap_R_RegisterShader( "shotgunSmokePuff" );
 
 	cgs.media.plasmaBallShader = trap_R_RegisterShader( "sprites/plasma1" );
+	cgs.media.ringFlashModel = trap_R_RegisterModel("models/weaphits/ring02.md3");
 	cgs.media.railRingsShader = trap_R_RegisterShader( "railDisc" );
 
 	cgs.media.bloodTrailShader = trap_R_RegisterShader( "bloodTrail" );

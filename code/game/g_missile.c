@@ -230,21 +230,20 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace, int impactDamage, vec3_t d
 		}
 	}
 
-//----(SA) removed as we have no hook
-
-	// is it cheaper in bandwidth to just remove this ent and create a new
-	// one, rather than changing the missile into the explosion?
-
-	if ( other->takedamage && other->client ) {
-		G_AddEvent( ent, EV_MISSILE_HIT, DirToByte( trace->plane.normal ) );
+	if (other->takedamage && other->client)
+	{
+		G_AddEvent(ent, EV_MISSILE_HIT, DirToByte(trace->plane.normal));
 		ent->s.otherEntityNum = other->s.number;
-	} else {
-		// Ridah, try projecting it in the direction it came from, for better decals
-//		G_AddEvent( ent, EV_MISSILE_MISS, DirToByte( trace->plane.normal ) );
-//		vec3_t dir;
-//		BG_EvaluateTrajectoryDelta( &ent->s.pos, level.time, dir );
-		BG_GetMarkDir( dir, trace->plane.normal, dir );
-		G_AddEvent( ent, EV_MISSILE_MISS_LARGE, DirToByte( dir ) );
+	}
+	else if (ent->s.weapon == WP_Q3_PLASMAGUN)
+	{
+		BG_GetMarkDir(dir, trace->plane.normal, dir);
+		G_AddEvent(ent, EV_MISSILE_MISS, DirToByte(dir)); // small event, not LARGE
+	}
+	else
+	{
+		BG_GetMarkDir(dir, trace->plane.normal, dir);
+		G_AddEvent(ent, EV_MISSILE_MISS_LARGE, DirToByte(dir));
 	}
 
 	ent->freeAfterEvent = qtrue;
@@ -280,12 +279,12 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace, int impactDamage, vec3_t d
 		}
 	}
 
-
-	if ( strcmp( ent->classname, "zombiespit" ) ) {
+	if (strcmp(ent->classname, "zombiespit") && ent->s.weapon != WP_Q3_PLASMAGUN)
+	{
 		gentity_t *Msmoke;
 
 		Msmoke = G_Spawn();
-		VectorCopy( ent->r.currentOrigin, Msmoke->s.origin );
+		VectorCopy(ent->r.currentOrigin, Msmoke->s.origin);
 		Msmoke->think = M_think;
 		Msmoke->nextthink = level.time + FRAMETIME;
 		Msmoke->health = 5;
