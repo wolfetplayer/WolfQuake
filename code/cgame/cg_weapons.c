@@ -6498,6 +6498,7 @@ void CG_MissileHitPlayer( centity_t *cent, int weapon, vec3_t origin, vec3_t dir
 	case WP_GRENADE_LAUNCHER:
 	case WP_PANZERFAUST:
 	case WP_Q3_ROCKET_LAUNCHER:
+	case WP_Q3_PLASMAGUN:
 		// this shake is /on top/ of the shake from the impact (done in CG_MissileHitWall)
 		CG_StartShakeCamera( 0.1, 500, origin, 100 );
 		CG_MissileHitWall( weapon, 0, origin, dir, 0 );     //	(SA) modified to send missilehitwall surface parameters
