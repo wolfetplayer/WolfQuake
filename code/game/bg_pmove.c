@@ -2616,6 +2616,7 @@ void PM_CheckForReload(int weapon) {
 		case WP_TESLA:
 		case WP_Q3_ROCKET_LAUNCHER:
 		case WP_Q3_PLASMAGUN:
+		case WP_Q3_SHOTGUN:
 		case WP_HOLYCROSS:
 			return;
 		default:

@@ -798,7 +798,7 @@ void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 Bullet_Fire_Normal
 ==============
 */
-#define NUM_SHOTGUN_PELLETS 12
+#define NUM_SHOTGUN_PELLETS 15
 static void Bullet_Fire_Normal( gentity_t *ent, float aimSpreadScale ) {
 	int numPellets;
 	weapon_t weapon = ent->s.weapon;
@@ -1948,6 +1948,9 @@ void FireWeapon( gentity_t *ent ) {
 			else
 				VectorMA(ent->client->ps.velocity, -24, vec_forward, ent->client->ps.velocity);
 		}
+		break;
+	case WP_Q3_SHOTGUN:
+		Bullet_Fire_Normal(ent, aimSpreadScale);
 		break;
 	case WP_PANZERFAUST:
 		if (ent->client->ps.weaponUpgraded[WP_PANZERFAUST])

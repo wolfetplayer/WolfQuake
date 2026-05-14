@@ -3960,6 +3960,7 @@ void CG_DrawWeaponSelect( void ) {
 		case WP_PANZERFAUST:
 		case WP_Q3_ROCKET_LAUNCHER:
 		case WP_Q3_PLASMAGUN:
+		case WP_Q3_SHOTGUN:
 		case WP_FLAMETHROWER:
 		case WP_FG42:
 		case WP_FG42SCOPE:
@@ -5996,6 +5997,7 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 	case WP_STEN:
 	case WP_SILENCER:
 	case WP_VENOM:
+	case WP_Q3_SHOTGUN:
 
 		r = rand() & 31;
 
