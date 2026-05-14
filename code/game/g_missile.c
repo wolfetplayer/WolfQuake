@@ -875,9 +875,9 @@ gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->s.weapon = WP_Q3_PLASMAGUN;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
-	bolt->damage = 20;
-	bolt->splashDamage = 15;
-	bolt->splashRadius = 20;
+	bolt->damage = ammoTable[WP_Q3_PLASMAGUN].playerDamage;
+	bolt->splashDamage = ammoTable[WP_Q3_PLASMAGUN].playerDamage;
+	bolt->splashRadius = ammoTable[WP_Q3_PLASMAGUN].playerSplashRadius;
 	bolt->methodOfDeath = MOD_Q3_PLASMA;
 	bolt->splashMethodOfDeath = MOD_Q3_PLASMA_SPLASH;
 	bolt->clipmask = MASK_SHOT;
