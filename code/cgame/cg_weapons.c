@@ -2423,6 +2423,45 @@ static float CG_TeslaSpinAngle( centity_t *cent ) {
 
 //----(SA)	added
 
+
+/*
+======================
+CG_MachinegunSpinAngle
+======================
+*/
+#define		SPIN_SPEED_Q3	0.9
+#define		COAST_TIME_Q3	1000
+static float	CG_MachinegunSpinAngle( centity_t *cent ) {
+	int		delta;
+	float	angle;
+	float	speed;
+
+	delta = cg.time - cent->pe.barrelTime;
+	if ( cent->pe.barrelSpinning ) {
+		angle = cent->pe.barrelAngle + delta * SPIN_SPEED_Q3;
+	} else {
+		if ( delta > COAST_TIME_Q3 ) {
+			delta = COAST_TIME_Q3;
+		}
+
+		speed = 0.5 * ( SPIN_SPEED_Q3 + (float)( COAST_TIME_Q3 - delta ) / COAST_TIME_Q3 );
+		angle = cent->pe.barrelAngle + delta * speed;
+	}
+
+	if ( cent->pe.barrelSpinning == !(cent->currentState.eFlags & EF_FIRING) ) {
+		cent->pe.barrelTime = cg.time;
+		cent->pe.barrelAngle = AngleMod( angle );
+		cent->pe.barrelSpinning = !!(cent->currentState.eFlags & EF_FIRING);
+#ifdef MISSIONPACK
+		if ( cent->currentState.weapon == WP_CHAINGUN && !cent->pe.barrelSpinning ) {
+			trap_S_StartSound( NULL, cent->currentState.number, CHAN_WEAPON, trap_S_RegisterSound( "sound/weapons/vulcan/wvulwind.wav", qfalse ) );
+		}
+#endif
+	}
+
+	return angle;
+}
+
 /*
 ======================
 CG_VenomSpinAngle
@@ -3430,7 +3469,17 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 					}
 					spunpart = qtrue;
 				}
-			} else if ( (weaponNum == WP_TESLA) || (weaponNum == WP_HOLYCROSS) )  {
+			}
+			else if (weaponNum == WP_Q3_MACHINEGUN)
+			{
+				if (i == W_PART_1)
+				{
+					angles[ROLL] = CG_MachinegunSpinAngle(cent);
+					spunpart = qtrue;
+				}
+			}
+			else if ((weaponNum == WP_TESLA) || (weaponNum == WP_HOLYCROSS))
+			{
 				if ( i == W_PART_1 || i == W_PART_2 ) {
 					angles[ROLL] = CG_TeslaSpinAngle( cent );
 					spunpart = qtrue;
@@ -3961,6 +4010,7 @@ void CG_DrawWeaponSelect( void ) {
 		case WP_Q3_ROCKET_LAUNCHER:
 		case WP_Q3_PLASMAGUN:
 		case WP_Q3_SHOTGUN:
+		case WP_Q3_MACHINEGUN:
 		case WP_FLAMETHROWER:
 		case WP_FG42:
 		case WP_FG42SCOPE:
@@ -5998,6 +6048,7 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 	case WP_SILENCER:
 	case WP_VENOM:
 	case WP_Q3_SHOTGUN:
+	case WP_Q3_MACHINEGUN:
 
 		r = rand() & 31;
 

@@ -711,6 +711,7 @@ void Add_Ammo(gentity_t *ent, int weapon, int count, qboolean fillClip) {
 		case WP_Q3_ROCKET_LAUNCHER:
 		case WP_Q3_PLASMAGUN:
 		case WP_Q3_SHOTGUN:
+		case WP_Q3_MACHINEGUN:
 		case WP_FLAMETHROWER:
 		case WP_HOLYCROSS:
 			noPack = qtrue;

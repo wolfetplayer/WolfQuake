@@ -1025,6 +1025,54 @@ ammoTable_t ammoTable[WP_NUM_WEAPONS] = {
 		0,
 		0,                               
 	},
+
+	{   
+		WP_Q3_MACHINEGUN,
+		WEAPON_CLASS_SMG,
+		WP_NONE,
+		WEAPON_TEAM_COMMON,      
+		0,                   
+		0,       
+		0,        
+		0,        
+		0,        
+		0,
+		0, 
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,     
+		0,
+		0,      
+		0,      
+		0,      
+		0,      
+		0,        
+		0,        
+		0,        
+		0,          
+		0,                 
+		0.0f,            
+		0,               
+		{.0, 0},         
+		{0,0},              
+		0,               
+		0.0,               
+		0,               
+		0,
+		{0.0, 0.0},               
+		MOD_Q3_MACHINEGUN, 
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,                               
+	},
    // Explosives
 	{  
 		WP_GRENADE_LAUNCHER,
@@ -3165,6 +3213,51 @@ model="models/weapons2/tesla/pu_tesla.md3"
 		{0,0,0,0,0,0}
 	},
 
+			{
+		"weapon_q3_machinegun",
+		"sound/misc/w_pkup.wav",
+		{   
+		"",
+		"",
+		""
+		},
+
+		"icons/icon_q3_machinegun", 
+		"Machine Gun",               
+		10,
+		IT_WEAPON,
+		WP_Q3_MACHINEGUN,
+		WP_Q3_MACHINEGUN,
+		WP_Q3_MACHINEGUN,
+		WP_Q3_MACHINEGUN,
+		WP_Q3_MACHINEGUN,
+		"",                      
+		"",                      
+		{0,0,0,0,0,0}
+	},
+
+	{
+		"ammo_q3_bullets",
+		"sound/misc/w_pkup.wav",
+		{   
+		"",
+		"",
+		""
+		},
+
+		"icons/iconw_panzerfaust_1", 
+		"Bullets",               
+		5,
+		IT_AMMO,
+		WP_NONE,
+		WP_Q3_MACHINEGUN,
+		WP_Q3_MACHINEGUN,
+		WP_Q3_MACHINEGUN,
+		WP_Q3_MACHINEGUN,
+		"",                      
+		"",                      
+		{0,0,0,0,0,0}
+	},
 
 /*QUAKED weapon_sniperScope (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
@@ -7557,6 +7650,7 @@ char *BG_GetWeaponFilename( weapon_t weaponNum )
 		case WP_Q3_ROCKET_LAUNCHER: return "q3_rocket_launcher.weap";
 		case WP_Q3_PLASMAGUN:      return "q3_plasmagun.weap";
 		case WP_Q3_SHOTGUN:        return "q3_shotgun.weap";
+        case WP_Q3_MACHINEGUN:     return "q3_mg.weap";
 		case WP_NONE:
 		case WP_MONSTER_ATTACK1:
 		case WP_MONSTER_ATTACK2:

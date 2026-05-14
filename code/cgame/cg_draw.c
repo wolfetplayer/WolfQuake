@@ -783,6 +783,7 @@ static void CG_DrawStatusBar( void ) {
 			case WP_Q3_ROCKET_LAUNCHER:
 			case WP_Q3_PLASMAGUN:
 			case WP_Q3_SHOTGUN:
+			case WP_Q3_MACHINEGUN:
 				wideOffset = -38;
 				break;
 			default:
@@ -4249,6 +4250,7 @@ static qboolean isClipOnly( int weap ) {
 	case WP_Q3_SHOTGUN:
 	case WP_FLAMETHROWER:
 	case WP_KNIFE:
+	case WP_Q3_MACHINEGUN:
 		return qtrue;
 	}
 	return qfalse;
@@ -4286,6 +4288,7 @@ int CG_CollectWeaponWheelWeapons( int *visibleWeapons, int maxWeapons ) {
 		case WP_Q3_ROCKET_LAUNCHER:
 		case WP_Q3_PLASMAGUN:
 		case WP_Q3_SHOTGUN:
+		case WP_Q3_MACHINEGUN:
 
 		case WP_VENOM:
 		case WP_TESLA:
@@ -4450,6 +4453,7 @@ void CG_DrawWeaponWheel( void ) {
 		case WP_Q3_ROCKET_LAUNCHER:
 		case WP_Q3_PLASMAGUN:
 		case WP_Q3_SHOTGUN:
+		case WP_Q3_MACHINEGUN:
 		case WP_FLAMETHROWER:
 		case WP_FG42:
 		case WP_FG42SCOPE:

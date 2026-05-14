@@ -1950,6 +1950,7 @@ void FireWeapon( gentity_t *ent ) {
 		}
 		break;
 	case WP_Q3_SHOTGUN:
+	case WP_Q3_MACHINEGUN:
 		Bullet_Fire_Normal(ent, aimSpreadScale);
 		break;
 	case WP_PANZERFAUST:
