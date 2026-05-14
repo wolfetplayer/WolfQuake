@@ -1118,13 +1118,9 @@ gentity_t *fire_rocket( gentity_t *self, vec3_t start, vec3_t dir ) {
 	bolt->target_ent = NULL;
 
 	if ( isQ3Rocket ) {
-		/*
-		 * Quake 3 rocket launcher behavior.
-		 * Fixed damage, fixed splash, no upgrades, no class bonuses.
-		 */
-		bolt->damage = 100;
-		bolt->splashDamage = 100;
-		bolt->splashRadius = 120;
+		bolt->damage = ammoTable[WP_Q3_ROCKET_LAUNCHER].playerDamage;
+		bolt->splashDamage = ammoTable[WP_Q3_ROCKET_LAUNCHER].playerDamage;
+		bolt->splashRadius = ammoTable[WP_Q3_ROCKET_LAUNCHER].playerSplashRadius;
 	} else if ( self->aiCharacter ) {
 		// AI keeps using fixed Panzerfaust values
 		bolt->damage = ammoTable[WP_PANZERFAUST].aiDamage;
