@@ -659,7 +659,7 @@ qboolean CheckGauntletAttack( gentity_t *ent ) {
 	// set aiming directions
 	AngleVectors (ent->client->ps.viewangles, forward, right, up);
 
-	CalcMuzzlePoint ( ent, forward, right, up, muzzle );
+	CalcMuzzlePoint ( ent, WP_Q3_GAUNTLET, forward, right, up, muzzle );
 
 	VectorMA (muzzle, 32, forward, end);
 
