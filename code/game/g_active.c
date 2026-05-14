@@ -1146,6 +1146,12 @@ void ClientThink_real( gentity_t *ent ) {
 
 	memset( &pm, 0, sizeof( pm ) );
 
+	if (client->ps.weapon == WP_Q3_GAUNTLET && !(ucmd->buttons & BUTTON_TALK) &&
+		(ucmd->buttons & BUTTON_ATTACK) && client->ps.weaponTime <= 0)
+	{
+		pm.gauntletHit = CheckGauntletAttack(ent);
+	}
+
 	pm.ps = &client->ps;
 	pm.cmd = *ucmd;
 	pm.oldcmd = client->pers.oldcmd;

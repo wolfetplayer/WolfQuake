@@ -170,6 +170,7 @@ static int weapIconDrawSize( int weap ) {
 	case WP_M97:
 		return 2;
 	case WP_KNIFE:
+	case WP_Q3_GAUNTLET:
 	     return 1;
 	}
 
