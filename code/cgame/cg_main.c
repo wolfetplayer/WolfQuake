@@ -1520,6 +1520,7 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.plasmaBallShader = trap_R_RegisterShader( "sprites/plasma1" );
 	cgs.media.ringFlashModel = trap_R_RegisterModel("models/weaphits/ring02.md3");
 	cgs.media.railRingsShader = trap_R_RegisterShader( "railDisc" );
+	cgs.media.dishFlashModel = trap_R_RegisterModel("models/weaphits/boom01.md3");
 
 	cgs.media.bloodTrailShader = trap_R_RegisterShader( "bloodTrail" );
 	cgs.media.lagometerShader = trap_R_RegisterShader( "lagometer" );
@@ -1659,7 +1660,7 @@ static void CG_RegisterGraphics( void ) {
 
 	// RF, not used anymore
 	//cgs.media.targetEffectExplosionShader	= trap_R_RegisterShader( "targetEffectExplode" );
-	//cgs.media.rocketExplosionShader			= trap_R_RegisterShader( "rocketExplosion" );
+	cgs.media.rocketExplosionShader = trap_R_RegisterShader( "rocketExplosion" );
 	//cgs.media.grenadeExplosionShader		= trap_R_RegisterShader( "grenadeExplosion" );
 
 	// zombie shot

@@ -235,7 +235,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace, int impactDamage, vec3_t d
 		G_AddEvent(ent, EV_MISSILE_HIT, DirToByte(trace->plane.normal));
 		ent->s.otherEntityNum = other->s.number;
 	}
-	else if (ent->s.weapon == WP_Q3_PLASMAGUN)
+	else if (ent->s.weapon == WP_Q3_PLASMAGUN || ent->s.weapon == WP_Q3_ROCKET_LAUNCHER)
 	{
 		BG_GetMarkDir(dir, trace->plane.normal, dir);
 		G_AddEvent(ent, EV_MISSILE_MISS, DirToByte(dir)); // small event, not LARGE
