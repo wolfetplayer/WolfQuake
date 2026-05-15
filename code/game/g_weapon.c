@@ -1916,6 +1916,10 @@ void FireWeapon( gentity_t *ent ) {
 
 	// fire the specific weapon
 	switch ( ent->s.weapon ) {
+
+	case WP_Q3_GAUNTLET:
+		Weapon_Gauntlet( ent );
+		break;
 	// these weapons can be handled at the same way
 	case WP_LUGER:
 	case WP_SILENCER:

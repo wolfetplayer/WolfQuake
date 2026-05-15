@@ -1073,6 +1073,54 @@ ammoTable_t ammoTable[WP_NUM_WEAPONS] = {
 		0,
 		0,                               
 	},
+
+	{   
+		WP_Q3_GAUNTLET,
+		WEAPON_CLASS_MELEE,
+		WP_NONE,
+		WEAPON_TEAM_COMMON,      
+		0,                   
+		0,       
+		0,        
+		0,        
+		0,        
+		0,
+		0, 
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,     
+		0,
+		0,      
+		0,      
+		0,      
+		0,      
+		0,        
+		0,        
+		0,        
+		0,          
+		0,                 
+		0.0f,            
+		0,               
+		{.0, 0},         
+		{0,0},              
+		0,               
+		0.0,               
+		0,               
+		0,
+		{0.0, 0.0},               
+		MOD_Q3_GAUNTLET, 
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,                               
+	},
    // Explosives
 	{  
 		WP_GRENADE_LAUNCHER,
@@ -3258,6 +3306,30 @@ model="models/weapons2/tesla/pu_tesla.md3"
 		"",                      
 		{0,0,0,0,0,0}
 	},
+
+		{
+		"weapon_q3_gauntlet",
+		"sound/misc/w_pkup.wav",
+		{   
+		"",
+		"",
+		""
+		},
+
+		"icons/icon_q3_gauntlet", 
+		"Gauntlet",               
+		0,
+		IT_WEAPON,
+		WP_Q3_GAUNTLET,
+		WP_Q3_GAUNTLET,
+		WP_Q3_GAUNTLET,
+		WP_Q3_GAUNTLET,
+		WP_Q3_GAUNTLET,
+		"",                      
+		"",                      
+		{0,0,0,0,0,0}
+	},
+
 
 /*QUAKED weapon_sniperScope (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
@@ -7651,6 +7723,7 @@ char *BG_GetWeaponFilename( weapon_t weaponNum )
 		case WP_Q3_PLASMAGUN:      return "q3_plasmagun.weap";
 		case WP_Q3_SHOTGUN:        return "q3_shotgun.weap";
         case WP_Q3_MACHINEGUN:     return "q3_mg.weap";
+		case WP_Q3_GAUNTLET:       return "q3_gauntlet.weap";
 		case WP_NONE:
 		case WP_MONSTER_ATTACK1:
 		case WP_MONSTER_ATTACK2:

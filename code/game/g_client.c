@@ -1423,6 +1423,8 @@ void ClientSpawn( gentity_t *ent ) {
 
 	client->ps.clientNum = index;
 
+	client->ps.ammo[WP_Q3_GAUNTLET] = -1;
+
 	// spawn protection for player on initial spawn - might be useful on some custom maps
 	if ( !( ent->r.svFlags & SVF_CASTAI ) ) {  
 	client->ps.powerups[PW_INVULNERABLE] = level.time + 5000;

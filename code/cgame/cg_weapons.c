@@ -3470,7 +3470,7 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 					spunpart = qtrue;
 				}
 			}
-			else if (weaponNum == WP_Q3_MACHINEGUN)
+			else if (weaponNum == WP_Q3_MACHINEGUN || weaponNum == WP_Q3_GAUNTLET)
 			{
 				if (i == W_PART_1)
 				{
@@ -3552,6 +3552,11 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 
 
 	// add the flash
+	if ( ( weaponNum == WP_Q3_LIGHTNING || weaponNum == WP_Q3_GAUNTLET )
+		&& ( nonPredictedCent->currentState.eFlags & EF_FIRING ) ) 
+	{
+
+	}
 	memset( &flash, 0, sizeof( flash ) );
 	VectorCopy( parent->lightingOrigin, flash.lightingOrigin );
 	flash.shadowPlane = parent->shadowPlane;

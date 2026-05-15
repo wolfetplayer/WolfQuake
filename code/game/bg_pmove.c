@@ -445,7 +445,7 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 	float total;
 	float scale;
 
-	if ( pm->ps->aiChar && !( pm->ps->eFlags & EF_DUMMY_PMOVE ) ) {
+	/*if ( pm->ps->aiChar && !( pm->ps->eFlags & EF_DUMMY_PMOVE ) ) {
 		// restrict AI character movements (don't strafe or run backwards as fast as they can run forwards)
 		if ( cmd->forwardmove < -64.0 ) {
 			cmd->forwardmove = -64.0;
@@ -455,7 +455,7 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 		} else if ( cmd->rightmove < -64.0 ) {
 			cmd->rightmove = -64.0;
 		}
-	}
+	}*/
 
 	max = abs( cmd->forwardmove );
 	if ( abs( cmd->rightmove ) > max ) {
@@ -3464,6 +3464,19 @@ static void PM_Weapon( void ) {
 
 		pm->ps->weaponstate = WEAPON_READY;
 		return;
+	}
+
+
+	
+	// start the animation even if out of ammo
+	if ( pm->ps->weapon == WP_Q3_GAUNTLET ) {
+		// the guantlet only "fires" when it actually hits something
+		if ( !pm->gauntletHit ) {
+			pm->ps->weaponTime = 0;
+			pm->ps->weaponstate = WEAPON_READY;
+			return;
+		}
+
 	}
 
 
