@@ -809,6 +809,9 @@ void Use_Shooter( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 		VectorScale( dir, 700, dir );                 //----(SA)	had to add this as fire_grenade now expects a non-normalized direction vector
 		fire_grenade( ent, ent->s.origin, dir, WP_GRENADE_LAUNCHER );
 		break;
+	case WP_Q3_GRENADE_LAUNCHER:
+		fire_q3_grenade( ent, ent->s.origin, dir );
+		break;
 	case WP_PANZERFAUST:
 	case WP_Q3_ROCKET_LAUNCHER:
 		fire_rocket( ent, ent->s.origin, dir );

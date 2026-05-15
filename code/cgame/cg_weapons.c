@@ -4013,6 +4013,7 @@ void CG_DrawWeaponSelect( void ) {
 		case WP_TESLA:
 		case WP_PANZERFAUST:
 		case WP_Q3_ROCKET_LAUNCHER:
+		case WP_Q3_GRENADE_LAUNCHER:
 		case WP_Q3_PLASMAGUN:
 		case WP_Q3_SHOTGUN:
 		case WP_Q3_MACHINEGUN:
@@ -6333,6 +6334,15 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 		lightColor[1] = 0.75;
 		lightColor[2] = 0.0;
 		break;
+	case WP_Q3_GRENADE_LAUNCHER:
+		mod = cgs.media.dishFlashModel;
+		shader = cgs.media.grenadeExplosionShader;
+		sfx = cgs.media.sfx_rockexp;
+		mark = cgs.media.burnMarkShader;
+		radius = 64;
+		light = 300;
+		isSprite = qtrue;
+		break;
 	case WP_Q3_PLASMAGUN:
 		mod = cgs.media.ringFlashModel;
 		shader = cgs.media.plasmaExplosionShader;
@@ -6557,6 +6567,7 @@ void CG_MissileHitPlayer( centity_t *cent, int weapon, vec3_t origin, vec3_t dir
 	case WP_PANZERFAUST:
 	case WP_Q3_ROCKET_LAUNCHER:
 	case WP_Q3_PLASMAGUN:
+	case WP_Q3_GRENADE_LAUNCHER:
 		// this shake is /on top/ of the shake from the impact (done in CG_MissileHitWall)
 		CG_StartShakeCamera( 0.1, 500, origin, 100 );
 		CG_MissileHitWall( weapon, 0, origin, dir, 0 );     //	(SA) modified to send missilehitwall surface parameters

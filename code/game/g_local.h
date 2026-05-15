@@ -929,6 +929,7 @@ void G_RunSpit( gentity_t *ent );
 void G_RunDebris( gentity_t *ent );
 
 gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t aimdir);
+gentity_t *fire_q3_grenade (gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t aimdir, int grenadeWPID );
 gentity_t *fire_rocket( gentity_t *self, vec3_t start, vec3_t dir );
 
@@ -981,6 +982,7 @@ void SnapVectorTowards( vec3_t v, vec3_t to );
 qboolean CheckGauntletAttack( gentity_t *ent );
 trace_t *CheckMeleeAttack( gentity_t *ent, float dist, qboolean isTest );
 gentity_t *weapon_grenadelauncher_fire( gentity_t *ent, int grenadeWPID );
+void weapon_q3_grenadelauncher_fire( gentity_t *ent );
 gentity_t *quickgren_fire( gentity_t *ent, int grenadeWPID );
 void CalcMuzzlePoints( gentity_t *ent, int weapon );
 

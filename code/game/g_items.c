@@ -709,6 +709,7 @@ void Add_Ammo(gentity_t *ent, int weapon, int count, qboolean fillClip) {
 			COM_BitSet(ent->client->ps.weapons, ammoweap);
 		case WP_TESLA:
 		case WP_Q3_ROCKET_LAUNCHER:
+		case WP_Q3_GRENADE_LAUNCHER:
 		case WP_Q3_PLASMAGUN:
 		case WP_Q3_SHOTGUN:
 		case WP_Q3_MACHINEGUN:

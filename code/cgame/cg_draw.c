@@ -781,6 +781,7 @@ static void CG_DrawStatusBar( void ) {
 			case WP_PANZERFAUST:
 			case WP_FLAMETHROWER:
 			case WP_Q3_ROCKET_LAUNCHER:
+			case WP_Q3_GRENADE_LAUNCHER:
 			case WP_Q3_PLASMAGUN:
 			case WP_Q3_SHOTGUN:
 			case WP_Q3_MACHINEGUN:
@@ -4246,6 +4247,7 @@ static qboolean isClipOnly( int weap ) {
 	case WP_DYNAMITE:
 	case WP_TESLA:
 	case WP_Q3_ROCKET_LAUNCHER:
+	case WP_Q3_GRENADE_LAUNCHER:
 	case WP_Q3_PLASMAGUN:
 	case WP_Q3_SHOTGUN:
 	case WP_FLAMETHROWER:
@@ -4286,6 +4288,7 @@ int CG_CollectWeaponWheelWeapons( int *visibleWeapons, int maxWeapons ) {
 		case WP_PANZERFAUST:
 		case WP_FLAMETHROWER:
 		case WP_Q3_ROCKET_LAUNCHER:
+		case WP_Q3_GRENADE_LAUNCHER:
 		case WP_Q3_PLASMAGUN:
 		case WP_Q3_SHOTGUN:
 		case WP_Q3_MACHINEGUN:
@@ -4451,6 +4454,7 @@ void CG_DrawWeaponWheel( void ) {
 		case WP_TESLA:
 		case WP_PANZERFAUST:
 		case WP_Q3_ROCKET_LAUNCHER:
+		case WP_Q3_GRENADE_LAUNCHER:
 		case WP_Q3_PLASMAGUN:
 		case WP_Q3_SHOTGUN:
 		case WP_Q3_MACHINEGUN:

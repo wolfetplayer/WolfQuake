@@ -178,6 +178,7 @@ extern qboolean VenomPellet ( vec3_t start , vec3_t end , gentity_t * ent ) ;
 extern void weapon_zombiespirit ( gentity_t * ent , gentity_t * missile ) ;
 extern void weapon_zombiespit ( gentity_t * ent ) ;
 extern gentity_t * weapon_grenadelauncher_fire ( gentity_t * ent , int grenType ) ;
+extern void weapon_q3_grenadelauncher_fire( gentity_t *ent );
 extern gentity_t * quickgren_fire ( gentity_t * ent , int grenType ) ;
 //extern void Bullet_Fire_Extended ( gentity_t * source , gentity_t * attacker , vec3_t start , vec3_t end , float spread , int damage , int recursion ) ;
 extern qboolean Bullet_Fire_Extended ( gentity_t * source , gentity_t * attacker , vec3_t start , vec3_t end , float spread , int damage , int recursion ) ;
@@ -901,6 +902,7 @@ extern gentity_t * fire_zombiespit ( gentity_t * self , vec3_t start , vec3_t di
 extern gentity_t * fire_rocket ( gentity_t * self , vec3_t start , vec3_t dir ) ;
 extern gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t aimdir);
 extern gentity_t * fire_grenade ( gentity_t * self , vec3_t start , vec3_t dir , int grenadeWPID ) ;
+extern gentity_t *fire_q3_grenade (gentity_t *self, vec3_t start, vec3_t aimdir);
 extern void G_RunSpit ( gentity_t * ent ) ;
 extern int G_PredictMissile ( gentity_t * ent , int duration , vec3_t endPos , qboolean allowBounce ) ;
 extern void G_PredictBounceMissile ( gentity_t * ent , trajectory_t * pos , trace_t * trace , int time ) ;

@@ -1171,6 +1171,19 @@ gentity_t *weapon_gpg40_fire( gentity_t *ent, int grenType ) {
 	return m;
 }
 
+
+void weapon_q3_grenadelauncher_fire (gentity_t *ent) {
+	gentity_t	*m;
+
+	// extra vertical velocity
+	forward[2] += 0.2f;
+	VectorNormalize( forward );
+
+	m = fire_q3_grenade (ent, muzzleEffect, forward);
+	m->damage *= s_quadFactor;
+	m->splashDamage *= s_quadFactor;
+}
+
 gentity_t *weapon_grenadelauncher_fire( gentity_t *ent, int grenType ) {
 	gentity_t   *m, *te;
 	float upangle = 0;                  //	start with level throwing and adjust based on angle
@@ -2018,6 +2031,9 @@ void FireWeapon( gentity_t *ent ) {
 			else
 				VectorMA(ent->client->ps.velocity, -24, vec_forward, ent->client->ps.velocity);
 		}
+		break;
+	case WP_Q3_GRENADE_LAUNCHER:
+		weapon_q3_grenadelauncher_fire( ent );
 		break;
 	case WP_Q3_SHOTGUN:
 	case WP_Q3_MACHINEGUN:
