@@ -1661,7 +1661,7 @@ static void CG_RegisterGraphics( void ) {
 	// RF, not used anymore
 	//cgs.media.targetEffectExplosionShader	= trap_R_RegisterShader( "targetEffectExplode" );
 	cgs.media.rocketExplosionShader = trap_R_RegisterShader( "rocketExplosion" );
-	//cgs.media.grenadeExplosionShader		= trap_R_RegisterShader( "grenadeExplosion" );
+	cgs.media.grenadeExplosionShader		= trap_R_RegisterShader( "grenadeExplosion" );
 
 	// zombie shot
 	//cgs.media.zombieLoogie = trap_R_RegisterModel( "models/mapobjects/bodyparts/zom_loog.md3" );
