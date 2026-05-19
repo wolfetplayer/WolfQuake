@@ -866,6 +866,7 @@ typedef enum {
 	EV_PLAYER_HIT,  // hitsound event
 	EV_STOP_RELOADING_SOUND,
     EV_EMP_WAVE,
+	EV_Q3_RAILTRAIL,
 	EV_MAX_EVENTS   // just added as an 'endcap'
 } entity_event_t;
 
@@ -1222,7 +1223,8 @@ typedef enum {
 	MOD_Q3_MACHINEGUN,
 	MOD_Q3_GAUNTLET,
 	MOD_Q3_GRENADE_LAUNCHER,
-	MOD_Q3_GRENADE_LAUNCHER_SPLASH
+	MOD_Q3_GRENADE_LAUNCHER_SPLASH,
+	MOD_Q3_RAILGUN
 
 } meansOfDeath_t;
 

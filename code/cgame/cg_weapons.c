@@ -1137,6 +1137,115 @@ void CG_RailTrail( clientInfo_t *ci, vec3_t start, vec3_t end, int type ) {  //-
 
 }
 
+
+/*
+==========================
+CG_RailTrail
+==========================
+*/
+void CG_Q3_RailTrail (clientInfo_t *ci, vec3_t start, vec3_t end) {
+	vec3_t axis[36], move, move2, vec, temp;
+	float  len;
+	int    i, j, skip;
+ 
+	localEntity_t *le;
+	refEntity_t   *re;
+ 
+#define RADIUS   4
+#define ROTATION 1
+#define SPACING  5
+ 
+	start[2] -= 4;
+ 
+	le = CG_AllocLocalEntity();
+	re = &le->refEntity;
+ 
+	le->leType = LE_FADE_RGB;
+	le->startTime = cg.time;
+	le->endTime = cg.time + cg_railTrailTime.value;
+	le->lifeRate = 1.0 / (le->endTime - le->startTime);
+ 
+	re->shaderTime = cg.time / 1000.0f;
+	re->reType = RT_RAIL_CORE;
+	re->customShader = cgs.media.railCoreShader;
+ 
+	VectorCopy(start, re->origin);
+	VectorCopy(end, re->oldorigin);
+ 
+	re->shaderRGBA[0] = ci->color[0] * 255;
+	re->shaderRGBA[1] = ci->color[1] * 255;
+	re->shaderRGBA[2] = ci->color[2] * 255;
+	re->shaderRGBA[3] = 255;
+
+	le->color[0] = ci->color[0] * 0.75;
+	le->color[1] = ci->color[1] * 0.75;
+	le->color[2] = ci->color[2] * 0.75;
+	le->color[3] = 1.0f;
+
+	AxisClear( re->axis );
+ 
+
+	VectorCopy (start, move);
+	VectorSubtract (end, start, vec);
+	len = VectorNormalize (vec);
+	PerpendicularVector(temp, vec);
+	for (i = 0 ; i < 36; i++)
+	{
+		RotatePointAroundVector(axis[i], vec, temp, i * 10);//banshee 2.4 was 10
+	}
+
+	VectorMA(move, 20, vec, move);
+	VectorScale (vec, SPACING, vec);
+
+	skip = -1;
+ 
+	j = 18;
+	for (i = 0; i < len; i += SPACING)
+	{
+		if (i != skip)
+		{
+			skip = i + SPACING;
+			le = CG_AllocLocalEntity();
+			re = &le->refEntity;
+			le->leFlags = LEF_PUFF_DONT_SCALE;
+			le->leType = LE_MOVE_SCALE_FADE;
+			le->startTime = cg.time;
+			le->endTime = cg.time + (i>>1) + 600;
+			le->lifeRate = 1.0 / (le->endTime - le->startTime);
+
+			re->shaderTime = cg.time / 1000.0f;
+			re->reType = RT_SPRITE;
+			re->radius = 1.1f;
+			re->customShader = cgs.media.railRingsShader;
+
+			re->shaderRGBA[0] = ci->color[0] * 255;
+			re->shaderRGBA[1] = ci->color[1] * 255;
+			re->shaderRGBA[2] = ci->color[2] * 255;
+			re->shaderRGBA[3] = 255;
+
+			le->color[0] = ci->color[0] * 0.75;
+			le->color[1] = ci->color[1] * 0.75;
+			le->color[2] = ci->color[2] * 0.75;
+			le->color[3] = 1.0f;
+
+			le->pos.trType = TR_LINEAR;
+			le->pos.trTime = cg.time;
+
+			VectorCopy( move, move2);
+			VectorMA(move2, RADIUS , axis[j], move2);
+			VectorCopy(move2, le->pos.trBase);
+
+			le->pos.trDelta[0] = axis[j][0]*6;
+			le->pos.trDelta[1] = axis[j][1]*6;
+			le->pos.trDelta[2] = axis[j][2]*6;
+		}
+
+		VectorAdd (move, vec, move);
+
+		j = (j + ROTATION) % 36;
+	}
+}
+
 /*
 ==========================
 CG_PlasmaTrail
@@ -3286,6 +3395,21 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 		gun.shaderRGBA[3] = 255;
 	}
 
+	// set custom shading for railgun refire rate
+	if( weaponNum == WP_Q3_RAILGUN ) {
+		clientInfo_t *ci = &cgs.clientinfo[cent->currentState.clientNum];
+		if( cent->pe.railFireTime + 1500 > cg.time ) {
+			int scale = 255 * ( cg.time - cent->pe.railFireTime ) / 1500;
+			gun.shaderRGBA[0] = ( ci->c1RGBA[0] * scale ) >> 8;
+			gun.shaderRGBA[1] = ( ci->c1RGBA[1] * scale ) >> 8;
+			gun.shaderRGBA[2] = ( ci->c1RGBA[2] * scale ) >> 8;
+			gun.shaderRGBA[3] = 255;
+		}
+		else {
+			Byte4Copy( ci->c1RGBA, gun.shaderRGBA );
+		}
+	}
+
 	if (ps)
 	{
 		gun.hModel = weapon->weaponModel[W_FP_MODEL].model;
@@ -3572,6 +3696,17 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	angles[PITCH]   = 0;
 	angles[ROLL]    = crandom() * 10;
 	AnglesToAxis( angles, flash.axis );
+
+
+		// colorize the railgun blast
+	if ( weaponNum == WP_Q3_RAILGUN ) {
+		clientInfo_t	*ci;
+
+		ci = &cgs.clientinfo[ cent->currentState.clientNum ];
+		flash.shaderRGBA[0] = 255 * ci->color[0];
+		flash.shaderRGBA[1] = 255 * ci->color[1];
+		flash.shaderRGBA[2] = 255 * ci->color[2];
+	}
 
 	if ( weaponNum == WP_AKIMBO )
 	{
@@ -4013,6 +4148,7 @@ void CG_DrawWeaponSelect( void ) {
 		case WP_TESLA:
 		case WP_PANZERFAUST:
 		case WP_Q3_ROCKET_LAUNCHER:
+		case WP_Q3_RAILGUN:
 		case WP_Q3_GRENADE_LAUNCHER:
 		case WP_Q3_PLASMAGUN:
 		case WP_Q3_SHOTGUN:
@@ -5583,6 +5719,7 @@ void CG_WeaponFireRecoil( int weapon ) {
 		yawRandom *= 0.5;
 	break;
 	case WP_PANZERFAUST:
+	case WP_Q3_RAILGUN:
 	case WP_Q3_ROCKET_LAUNCHER:
 		CG_StartShakeCamera( 0.05, 700, cg.snap->ps.origin, 100 );
 		break;
@@ -5661,6 +5798,11 @@ void CG_FireWeapon( centity_t *cent, int event ) {
 	// mark the entity as muzzle flashing, so when it is added it will
 	// append the flash to the weapon model
 	cent->muzzleFlashTime = cg.time;
+
+	if( ent->weapon == WP_Q3_RAILGUN ) {
+		cent->pe.railFireTime = cg.time;
+	}
+
 
 	// RF, kick angles
 	if ( ent->number == cg.snap->ps.clientNum ) {
@@ -6334,6 +6476,13 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 		lightColor[1] = 0.75;
 		lightColor[2] = 0.0;
 		break;
+	case WP_Q3_RAILGUN:
+		mod = cgs.media.ringFlashModel;
+		shader = cgs.media.railExplosionShader;
+		sfx = cgs.media.sfx_plasmaexp;
+		mark = cgs.media.energyMarkShader;
+		radius = 24;
+		break;
 	case WP_Q3_GRENADE_LAUNCHER:
 		mod = cgs.media.dishFlashModel;
 		shader = cgs.media.grenadeExplosionShader;
@@ -6445,14 +6594,34 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 		// Ridah
 		le->lightOverdraw = lightOverdraw;
 		VectorCopy( lightColor, le->lightColor );
+				if ( weapon == WP_Q3_RAILGUN ) {
+			// colorize with client color
+			VectorCopy( cgs.clientinfo[clientNum].color, le->color );
+			le->refEntity.shaderRGBA[0] = le->color[0] * 0xff;
+			le->refEntity.shaderRGBA[1] = le->color[1] * 0xff;
+			le->refEntity.shaderRGBA[2] = le->color[2] * 0xff;
+			le->refEntity.shaderRGBA[3] = 0xff;
+		}
 	}
 
 	//
 	// impact mark
 	//
-	if ( mark ) {
-		CG_ImpactMark( mark, origin, dir, random() * 360, 1,1,1,1, alphaFade, radius, qfalse, -1 );
+if ( mark ) {
+	if ( weapon == WP_Q3_RAILGUN ) {
+		float *color;
+
+		// colorize with client color
+		color = cgs.clientinfo[clientNum].color;
+		CG_ImpactMark( mark, origin, dir, random() * 360,
+					   color[0], color[1], color[2], 1,
+					   alphaFade, radius, qfalse, -1 );
+	} else {
+		CG_ImpactMark( mark, origin, dir, random() * 360,
+					   1, 1, 1, 1,
+					   alphaFade, radius, qfalse, -1 );
 	}
+}
 }
 
 /*
@@ -6568,6 +6737,7 @@ void CG_MissileHitPlayer( centity_t *cent, int weapon, vec3_t origin, vec3_t dir
 	case WP_Q3_ROCKET_LAUNCHER:
 	case WP_Q3_PLASMAGUN:
 	case WP_Q3_GRENADE_LAUNCHER:
+	case WP_Q3_RAILGUN:
 		// this shake is /on top/ of the shake from the impact (done in CG_MissileHitWall)
 		CG_StartShakeCamera( 0.1, 500, origin, 100 );
 		CG_MissileHitWall( weapon, 0, origin, dir, 0 );     //	(SA) modified to send missilehitwall surface parameters

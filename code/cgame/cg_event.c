@@ -2104,9 +2104,29 @@ case EV_FILL_CLIP_FULL:
 		break;
 
 	case EV_RAILTRAIL:
-		// ev_railtrail is now sent standalone rather than by a player entity
-		CG_RailTrail( &cgs.clientinfo[ es->otherEntityNum2 ], es->origin2, es->pos.trBase, es->dmgFlags );   //----(SA)	added 'type' field
+		CG_RailTrail(&cgs.clientinfo[es->otherEntityNum2], es->origin2, es->pos.trBase, es->dmgFlags);
 		break;
+	case EV_Q3_RAILTRAIL:
+		DEBUGNAME("EV_Q3_RAILTRAIL");
+		cent->currentState.weapon = WP_Q3_RAILGUN;
+		
+		if(es->clientNum == cg.snap->ps.clientNum && !cg.renderingThirdPerson)
+		{
+			if(cg_drawGun.integer == 2)
+				VectorMA(es->origin2, 8, cg.refdef.viewaxis[1], es->origin2);
+			else if(cg_drawGun.integer == 3)
+				VectorMA(es->origin2, 4, cg.refdef.viewaxis[1], es->origin2);
+		}
+
+		CG_Q3_RailTrail(ci, es->origin2, es->pos.trBase);
+
+		// if the end was on a nomark surface, don't make an explosion
+		if ( es->eventParm != 255 ) {
+			ByteToDir( es->eventParm, dir );
+			CG_MissileHitWall( es->weapon, es->clientNum, position, dir, 0 );
+		}
+		break;
+
 		//
 		// missile impacts
 		//

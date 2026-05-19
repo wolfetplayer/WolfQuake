@@ -1663,6 +1663,9 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.rocketExplosionShader = trap_R_RegisterShader( "rocketExplosion" );
 	cgs.media.grenadeExplosionShader		= trap_R_RegisterShader( "grenadeExplosion" );
 
+	cgs.media.railExplosionShader = trap_R_RegisterShader( "railExplosion" );
+	cgs.media.energyMarkShader = trap_R_RegisterShader( "gfx/damage/plasma_mrk" );
+
 	// zombie shot
 	//cgs.media.zombieLoogie = trap_R_RegisterModel( "models/mapobjects/bodyparts/zom_loog.md3" );
 	cgs.media.flamebarrel = trap_R_RegisterModel( "models/furniture/barrel/barrel_a.md3" );

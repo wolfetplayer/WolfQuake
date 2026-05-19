@@ -42,7 +42,6 @@ static float s_quadFactor;
 static vec3_t forward, right, up;
 static vec3_t muzzleEffect;
 vec3_t muzzleTrace;
-static	vec3_t	muzzle;
 
 
 // forward dec
@@ -659,11 +658,11 @@ qboolean CheckGauntletAttack( gentity_t *ent ) {
 	// set aiming directions
 	AngleVectors (ent->client->ps.viewangles, forward, right, up);
 
-	CalcMuzzlePoint ( ent, WP_Q3_GAUNTLET, forward, right, up, muzzle );
+	CalcMuzzlePoint ( ent, WP_Q3_GAUNTLET, forward, right, up, muzzleEffect );
 
-	VectorMA (muzzle, 32, forward, end);
+	VectorMA (muzzleEffect, 32, forward, end);
 
-	trap_Trace (&tr, muzzle, NULL, NULL, end, ent->s.number, MASK_SHOT);
+	trap_Trace (&tr, muzzleEffect, NULL, NULL, end, ent->s.number, MASK_SHOT);
 	if ( tr.surfaceFlags & SURF_NOIMPACT ) {
 		return qfalse;
 	}
@@ -1489,6 +1488,117 @@ void weapon_venom_fire(gentity_t *ent, qboolean fullmode, float aimSpreadScale) 
 }
 
 
+/*
+=================
+weapon_railgun_fire
+=================
+*/
+#define	MAX_RAIL_HITS	4
+void weapon_railgun_fire (gentity_t *ent) {
+	vec3_t		end;
+#ifdef MISSIONPACK
+	vec3_t impactpoint, bouncedir;
+#endif
+	trace_t		trace;
+	gentity_t	*tent;
+	gentity_t	*traceEnt;
+	int			damage;
+	int			i;
+	int			hits;
+	int			unlinked;
+	int			passent;
+	gentity_t	*unlinkedEntities[MAX_RAIL_HITS];
+
+	damage = 100 * s_quadFactor;
+
+	VectorMA (muzzleTrace, 8192, forward, end);
+
+	// trace only against the solids, so the railgun will go through people
+	unlinked = 0;
+	hits = 0;
+	passent = ent->s.number;
+	do {
+		trap_Trace (&trace, muzzleEffect, NULL, NULL, end, passent, MASK_SHOT );
+		if ( trace.entityNum >= ENTITYNUM_MAX_NORMAL ) {
+			break;
+		}
+		traceEnt = &g_entities[ trace.entityNum ];
+		if ( traceEnt->takedamage ) {
+#ifdef MISSIONPACK
+			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
+				if ( G_InvulnerabilityEffect( traceEnt, forward, trace.endpos, impactpoint, bouncedir ) ) {
+					G_BounceProjectile( muzzle, impactpoint, bouncedir, end );
+					// snap the endpos to integers to save net bandwidth, but nudged towards the line
+					SnapVectorTowards( trace.endpos, muzzle );
+					// send railgun beam effect
+					tent = G_TempEntity( trace.endpos, EV_Q3_RAILTRAIL );
+					// set player number for custom colors on the railtrail
+					tent->s.clientNum = ent->s.clientNum;
+					VectorCopy( muzzle, tent->s.origin2 );
+					// move origin a bit to come closer to the drawn gun muzzle
+					VectorMA( tent->s.origin2, 4, right, tent->s.origin2 );
+					VectorMA( tent->s.origin2, -1, up, tent->s.origin2 );
+					tent->s.eventParm = 255;	// don't make the explosion at the end
+					//
+					VectorCopy( impactpoint, muzzle );
+					// the player can hit him/herself with the bounced rail
+					passent = ENTITYNUM_NONE;
+				}
+			}
+			else {
+				if( LogAccuracyHit( traceEnt, ent ) ) {
+					hits++;
+				}
+				G_Damage (traceEnt, ent, ent, forward, trace.endpos, damage, 0, MOD_Q3_RAILGUN);
+			}
+#else
+				if( LogAccuracyHit( traceEnt, ent ) ) {
+					hits++;
+				}
+				G_Damage (traceEnt, ent, ent, forward, trace.endpos, damage, 0, MOD_Q3_RAILGUN);
+#endif
+		}
+		if ( trace.contents & CONTENTS_SOLID ) {
+			break;		// we hit something solid enough to stop the beam
+		}
+		// unlink this entity, so the next trace will go past it
+		trap_UnlinkEntity( traceEnt );
+		unlinkedEntities[unlinked] = traceEnt;
+		unlinked++;
+	} while ( unlinked < MAX_RAIL_HITS );
+
+	// link back in any entities we unlinked
+	for ( i = 0 ; i < unlinked ; i++ ) {
+		trap_LinkEntity( unlinkedEntities[i] );
+	}
+
+	// the final trace endpos will be the terminal point of the rail trail
+
+	// snap the endpos to integers to save net bandwidth, but nudged towards the line
+	SnapVectorTowards( trace.endpos, muzzleEffect );
+
+	// send railgun beam effect
+	tent = G_TempEntity( trace.endpos, EV_Q3_RAILTRAIL );
+
+	// set player number for custom colors on the railtrail
+	tent->s.clientNum = ent->s.clientNum;
+
+	VectorCopy( muzzleEffect, tent->s.origin2 );
+	// move origin a bit to come closer to the drawn gun muzzle
+	VectorMA( tent->s.origin2, 4, right, tent->s.origin2 );
+	VectorMA( tent->s.origin2, -1, up, tent->s.origin2 );
+
+	// no explosion at end if SURF_NOIMPACT, but still make the trail
+	if ( trace.surfaceFlags & SURF_NOIMPACT ) {
+		tent->s.eventParm = 255;	// don't make the explosion at the end
+	} else {
+		tent->s.eventParm = DirToByte( trace.plane.normal );
+	}
+	tent->s.clientNum = ent->s.clientNum;
+
+}
+
+
 void Weapon_RocketLauncher_Fire( gentity_t *ent, float aimSpreadScale ) {
 	float r, u;
 	vec3_t dir, launchpos; 
@@ -2073,6 +2183,9 @@ void FireWeapon( gentity_t *ent ) {
 		break;
 	case WP_Q3_PLASMAGUN:
 		Weapon_Plasmagun_Fire( ent );
+		break;
+	case WP_Q3_RAILGUN:
+		weapon_railgun_fire( ent );
 		break;
 	case WP_GRENADE_LAUNCHER:
 	case WP_GRENADE_PINEAPPLE:

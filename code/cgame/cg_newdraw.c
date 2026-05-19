@@ -158,6 +158,7 @@ static int weapIconDrawSize( int weap ) {
 	case WP_TESLA:
 	case WP_PANZERFAUST:
 	case WP_Q3_ROCKET_LAUNCHER:
+	case WP_Q3_RAILGUN:
 	case WP_Q3_GRENADE_LAUNCHER:
 	case WP_Q3_PLASMAGUN:
 	case WP_Q3_SHOTGUN:
@@ -527,6 +528,7 @@ static void CG_DrawPlayerAmmoValue( rectDef_t *rect, int font, float scale, vec4
 	case WP_DYNAMITE:
 	case WP_TESLA:
 	case WP_Q3_ROCKET_LAUNCHER:
+	case WP_Q3_RAILGUN:
 	case WP_Q3_GRENADE_LAUNCHER:
 	case WP_Q3_PLASMAGUN:
 	case WP_Q3_SHOTGUN:

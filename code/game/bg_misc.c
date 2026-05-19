@@ -1169,6 +1169,54 @@ ammoTable_t ammoTable[WP_NUM_WEAPONS] = {
 		0,
 		0,                               
 	},
+
+	{   
+		WP_Q3_RAILGUN,
+		WEAPON_CLASS_LAUNCHER,
+		WP_NONE,
+		WEAPON_TEAM_COMMON,      
+		0,                   
+		0,       
+		0,        
+		0,        
+		0,        
+		0,
+		0, 
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,     
+		0,
+		0,      
+		0,      
+		0,      
+		0,      
+		0,        
+		0,        
+		0,        
+		0,          
+		0,                 
+		0.0f,            
+		0,               
+		{.0, 0},         
+		{0,0},              
+		0,               
+		0.0,               
+		0,               
+		0,
+		{0.0, 0.0},               
+		MOD_Q3_RAILGUN, 
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,                               
+	},
    // Explosives
 	{  
 		WP_GRENADE_LAUNCHER,
@@ -3420,6 +3468,52 @@ model="models/weapons2/tesla/pu_tesla.md3"
 		WP_Q3_GRENADE_LAUNCHER,
 		WP_Q3_GRENADE_LAUNCHER,
 		WP_Q3_GRENADE_LAUNCHER,
+		"",                      
+		"",                      
+		{0,0,0,0,0,0}
+	},
+
+		{
+		"weapon_q3_railgun",
+		"sound/misc/w_pkup.wav",
+		{   
+		"",
+		"",
+		""
+		},
+
+		"icons/icon_q3_railgun", 
+		"Railgun",               
+		10,
+		IT_WEAPON,
+		WP_Q3_RAILGUN,
+		WP_Q3_RAILGUN,
+		WP_Q3_RAILGUN,
+		WP_Q3_RAILGUN,
+		WP_Q3_RAILGUN,
+		"",                      
+		"",                      
+		{0,0,0,0,0,0}
+	},
+
+	{
+		"ammo_q3_slugs",
+		"sound/misc/w_pkup.wav",
+		{   
+		"",
+		"",
+		""
+		},
+
+		"icons/iconw_panzerfaust_1", 
+		"",               
+		5,
+		IT_AMMO,
+		WP_NONE,
+		WP_Q3_RAILGUN,
+		WP_Q3_RAILGUN,
+		WP_Q3_RAILGUN,
+		WP_Q3_RAILGUN,
 		"",                      
 		"",                      
 		{0,0,0,0,0,0}
@@ -7071,6 +7165,7 @@ char *eventnames[] = {
 	"EV_PLAYER_HIT",
 	"EV_STOP_RELOADING_SOUND",
 	"EV_EMP_WAVE",
+	"EV_Q3_RAILTRAIL"
 
 	"EV_MAX_EVENTS"
 };
@@ -7819,6 +7914,7 @@ char *BG_GetWeaponFilename( weapon_t weaponNum )
         case WP_Q3_MACHINEGUN:     return "q3_mg.weap";
 		case WP_Q3_GAUNTLET:       return "q3_gauntlet.weap";
 		case WP_Q3_GRENADE_LAUNCHER:       return "q3_gl.weap";
+		case WP_Q3_RAILGUN:        return "q3_railgun.weap";
 		case WP_NONE:
 		case WP_MONSTER_ATTACK1:
 		case WP_MONSTER_ATTACK2:
